@@ -5,16 +5,17 @@ use pyo3::prelude::*;
 mod neko_no_lib {
 
     use core::fmt;
+    use pyo3::prelude::*;
     use std::fmt::{Display, Formatter};
 
-    use pyo3::prelude::*;
-
     #[pyfunction] // Inline definition of a pyfunction, also made available to Python
+    #[pyo3(name = "triple")]
     fn triple(x: usize) -> usize {
         x * 3
     }
 
     #[pyfunction]
+    #[pyo3(name = "hello_people")]
     fn hello_people(x: usize) {
         match x {
             0 => println!("Hello to nobody"),
@@ -24,6 +25,7 @@ mod neko_no_lib {
     }
 
     #[pyfunction]
+    #[pyo3(name = "display_by_char")]
     fn display_by_char(i_string: String) -> Vec<String> {
         let mut o_string = Vec::new();
 
@@ -38,10 +40,13 @@ mod neko_no_lib {
     #[derive(Clone, Debug)]
     #[pyclass]
     struct City {
+        #[pyo3(get, set)]
         name: String,
         // Latitude
+        #[pyo3(get, set)]
         lat: f32,
         // Longitude
+        #[pyo3(get, set)]
         lon: f32,
     }
 
@@ -67,23 +72,14 @@ mod neko_no_lib {
         fn new(name: String, lat: f32, lon: f32) -> Self {
             City { name, lat, lon }
         }
-
-        fn __str__(&self) -> String {
-            format!("{}", self)
-        }
-
-        fn __repr__(&self) -> String {
-            format!(
-                "Debug: City(Name: {}, lat: {}, lon: {})",
-                self.name, self.lat, self.lon
-            )
-        }
     }
 
     #[derive(Clone, Debug)]
     #[pyclass]
     struct Meteo {
+        #[pyo3(get, set)]
         temp: f64,
+        #[pyo3(get, set)]
         location: City,
     }
 
@@ -99,30 +95,22 @@ mod neko_no_lib {
         fn new(temp: f64, location: City) -> Self {
             Meteo { temp, location }
         }
-
-        fn __str__(&self) -> String {
-            format!("{}", self)
-        }
-
-        fn __repr__(&self) -> String {
-            format!(
-                "Debug: Meteo(temp : {}, City : {})",
-                self.temp, self.location
-            )
-        }
     }
 
     fn print_meteo_rust(meteo: &Meteo) {
         println!("{:?}", meteo);
+
         println!("{}", meteo);
     }
 
     #[pyfunction]
+    #[pyo3(name = "print_meteo")]
     fn print_meteo(meteo: PyRef<'_, Meteo>) {
         print_meteo_rust(&meteo);
     }
 
     #[pyfunction]
+    #[pyo3(name = "test_meteo")]
     fn test_meteo() {
         let a = City {
             name: String::from("Lyon"),
