@@ -1,35 +1,43 @@
 import socket
-import signal
-import sys
+import time
+import neko_no_lib as nl
+from arduino.app_utils import *
+from arduino.app_bricks.web_ui import WebUI
+
+Grenoble = nl.City(name="Grenoble", lat=45.18, lon=5.72)
+Meteo = nl.Meteo(temp=0.0, location=Grenoble)
+
+
+def linux_started():
+    return True
+
+
+def python_func(data: float):
+    global Meteo
+    Meteo.temp = data
+    print("Temp reçue:", data)
+
 
 sserveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sserveur.bind(("0.0.0.0", 5010))
 sserveur.listen(1)
-
 sclient = None
-
-
-def handler(sig, frame):
-    print("\n[CTRL+C] Fermeture serveur + client")
-    global sclient
-    if sclient:
-        try:
-            sclient.close()
-        except:
-            raise
-    sserveur.close()
-    sys.exit(0)
-
-
-signal.signal(signal.SIGINT, handler)
-
 print("Serveur lancé")
 
-while True:
+
+Bridge.provide("linux_started", linux_started)
+Bridge.provide("python_func", python_func)
+
+print("Hello WebUI")
+ui = WebUI()
+
+ui.expose_api("GET", "/hello", lambda: {"message": "initialisation"})
+
+
+def loop():
     print("Attente d'un client ...")
     sclient, adclient = sserveur.accept()
     print(f"Connecté : {adclient}")
-
     while True:
         try:
             donnees = sclient.recv(4096)
@@ -39,14 +47,22 @@ while True:
                 print("[Client déconnecté]")
                 break
 
-            print(donnees.decode())
+            decoded = donnees.decode()
+            print(decoded)
+            if decoded == "temp":
+                # Envoi régulier vers l'interface web
+                if Meteo.temp is not None:
+                    ui.send_message("temp", Meteo.temp)
+                    nl.print_meteo(Meteo, False)
+                    reponse = f"{decoded}"
+                    sclient.send(reponse.encode())
 
-            reponse = f"{len(donnees)} octets"
-            sclient.send(reponse.encode())
+            else:
+                reponse = f"{len(donnees)} octets"
+                sclient.send(reponse.encode())
 
         except EOFError:
-            # Ctrl+D côté terminal (si tu fais input())
-            print("[CTRL+D] Déconnexion client")
+            print("Déconnexion client")
             break
 
         except ConnectionResetError:
@@ -55,3 +71,6 @@ while True:
 
     sclient.close()
     sclient = None
+
+
+App.run(user_loop=loop)
