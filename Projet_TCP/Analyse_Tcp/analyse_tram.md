@@ -103,17 +103,17 @@ if reponse is not None:
 * Côté Rockwell, seule la valeur `"0"` est lue
 * Les autres données restent dans le buffer
 
-![Texte alternatif](img/Petit_Ard_Rock_idea_1.png "Petit_Ard_Rock_idea_1")
+![Texte alternatif](img/Petit_Ard_Rock_Read_idea_1.png "Petit_Ard_Rock_Read_idea_1")
 
 ### Solution mise en place :
 
 * Lire en boucle tant que `buffer.length != 0`
 * Accumuler les données dans un buffer secondaire
 
-![Texte alternatif](img/Petit_Ard_Rock_idea_1.png "Petit_Ard_Rock_idea_1")
-![Texte alternatif](img/Petit_Ard_Rock_idea_2.png "Petit_Ard_Rock_idea_2")
-![Texte alternatif](img/Petit_Ard_Rock_idea_3.png "Petit_Ard_Rock_idea_3")
-![Texte alternatif](img/Petit_Ard_Rock_idea_4.png "Petit_Ard_Rock_idea_4")
+![Texte alternatif](img/Petit_Ard_Rock_Read_idea_1.png "Petit_Ard_Rock_Read_idea_1")
+![Texte alternatif](img/Petit_Ard_Rock_Read_idea_2.png "Petit_Ard_Rock_Read_idea_2")
+![Texte alternatif](img/Petit_Ard_Rock_Read_idea_3.png "Petit_Ard_Rock_Read_idea_3")
+![Texte alternatif](img/Petit_Ard_Rock_Read_idea_4.png "Petit_Ard_Rock_Read_idea_4")
 
 ### Résultat attendu :
 
