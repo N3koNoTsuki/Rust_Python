@@ -88,44 +88,74 @@ Données décodées :
 - Parsing immédiat possible
 
 ---
-## Implications pour le protocole
 
-### Points validés
-Le protocole fonctionne dans tous les cas  
-Le parsing basé sur :
-- signature (`NKP1`)
-- taille (`XXXX`)
-est correct  
+### 4. Mauvais Header envoyés
 
-Le buffer Rockwell contient bien toutes les données  
+Envoi d'un mauvais header 
 
----
+#### Observation cote Rockwell
 
-### Points critiques identifiés
+On detecte bien le mauvais header, on vas lire tout le buffer du socket pour assayer de le trouver, si rien, on retourne en idle
 
-#### 1. Dépendance au buffer
-Rockwell ne peut lire qu’un nombre limité de bytes par `Read Socket` (~484 bytes observé)
+![Texte alternatif](img/Bad_Header_test.png "Bad_Header_test")
 
-Obligation de :
-- lire en plusieurs fois
-- reconstruire côté automate
+--- 
 
----
+### 5. Taille trop grande
 
-#### 2. Nécessité d’un parsing robuste
+Envoi d'un payload trop importnat 
 
-Le système doit :
-1. Chercher la signature (`NKP1`)
-2. Lire la taille
-3. Attendre que tout le payload soit reçu
-4. Traiter uniquement quand complet
+#### Observation cote Rockwell
 
----
+On detecte bien que la size et trop grande comparer au buffer, on vient donc retourner en idle tout en vidant le buffer 
 
-## Conclusion
 
-Le protocole est **valide et robuste** face aux comportements réels du TCP :
+![Texte alternatif](img/Bad_Size_Reset_test.png "Bad_Size_Reset_test")
+![Texte alternatif](img/Bad_Size_test.png "Bad_Size_test")
 
-- Fragmentation → OK  
-- Regroupement → OK  
-- Envoi massif → OK  
+
+--- 
+
+### 6. Mauvais format de size
+
+Envoi d'un format non comforme pour la taille du payload
+
+#### Observation cote Rockwell
+
+On detecte l'erreur de format, resync puis retour en idle
+
+![Texte alternatif](img/Bad_Size_format_test.png "Bad_Size_format_test")
+
+--- 
+
+### 7. Mauvais footer 
+
+Envoi d'un mauvais footer 
+
+#### Observation cote Rockwell
+
+On detecte l'erreur de footer, resync puis idle
+
+![Texte alternatif](img/Bad_footer_test.png "Bad_footer_test")
+
+--- 
+
+### 8. Bruit avant le Header
+
+Envoie d'un header avec du bruit avant 
+
+#### Observation Wireshark
+
+![Texte alternatif](img/Noise_header_Wireshark_test.png "Noise_header_Wireshark_test ")
+
+#### Observation Rockwell
+
+![Texte alternatif](img/Noise_header_test.png "Noise_header_test")
+
+
+
+
+
+
+
+

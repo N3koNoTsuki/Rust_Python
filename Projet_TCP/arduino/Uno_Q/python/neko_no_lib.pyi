@@ -114,7 +114,7 @@ def display_by_char(i_string: str) -> list[str]:
     """
     ...
 
-def print_meteo(meteo: Meteo) -> None:
+def print_meteo(meteo: Meteo, Debug: bool) -> None:
     """
     Print a Meteo object using the Rust Display implementation.
 
