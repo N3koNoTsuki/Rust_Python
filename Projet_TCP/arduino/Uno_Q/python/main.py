@@ -128,31 +128,30 @@ def handle_message(decoded: str) -> str | None:
 
     if message == "big":
         return (
-            "Dans un système embarqué, la transmission de données repose sur des "
-            "trames structurées permettant d’assurer la synchronisation, l’intégrité "
-            "et l’interprétation correcte des informations. Chaque trame est "
-            "généralement composée d’un en-tête contenant des métadonnées, suivi "
-            "d’un champ de données utile appelé payload, puis d’un champ de contrôle "
+            "Dans un systeme embarque, la transmission de données repose sur des "
+            "trames structurees permettant d’assurer la synchronisation, l’intégrite "
+            "et l’interpretation correcte des informations. Chaque trame est "
+            "generalement composee d’un en-tete contenant des metadonnees, suivi "
+            "d’un champ de donnees utile appele payload, puis d’un champ de controle "
             "comme un CRC ou checksum. La taille des trames peut varier selon le "
-            "protocole utilisé, mais elle doit rester adaptée aux contraintes du "
-            "réseau, notamment en termes de bande passante et de latence. Une trame "
+            "protocole utilise, mais elle doit rester adaptee aux contraintes du "
+            "reseau, notamment en termes de bande passante et de latence. Une trame "
             "trop longue peut augmenter le risque d’erreurs, tandis qu’une trame trop "
-            "courte peut réduire l’efficacité globale de la communication. Dans les "
-            "systèmes industriels, comme ceux utilisant Ethernet/IP ou Modbus, la "
-            "gestion des trames est essentielle pour garantir un échange fiable entre "
-            "les automates programmables et les équipements connectés."
-            "NKP2"
+            "courte peut reduire l’efficacite globale de la communication. Dans les "
+            "systemes industriels, comme ceux utilisant Ethernet/IP ou Modbus, la "
+            "gestion des trames est essentielle pour garantir un echange fiable entre "
+            "les automates programmables et les equipements connectes."
         )
 
     if message == "temp":
         if Meteo.temp is not None:
             ui.send_message("temp", Meteo.temp)
             nl.print_meteo(Meteo, False)
-            return f"{Meteo.temp}NKP2"
+            return f"{Meteo.temp}"
         return "temp indisponible"
 
     # Réponse par défaut si le message n'est pas reconnu
-    return f"{len(message)} octetsNKP2"
+    return f"{len(message)} octets"
 
 
 # -------------------------------------------------------------------
@@ -197,7 +196,7 @@ def recv_exact(sock, size: int) -> bytes:
 #     Aucun
 # -------------------------------------------------------------------
 def send_frame(sock, payload: str):
-    payload_bytes = payload.encode()
+    payload_bytes = f"{payload}NKP2".encode()
 
     # :04d -> force un entier sur 4 chiffres avec des zéros devant
     header = f"NKP1{len(payload_bytes):04d}".encode()
