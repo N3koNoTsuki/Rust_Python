@@ -139,9 +139,3 @@ Permet de :
 - Toujours utiliser un buffer et reconstruire les trames
 
 ---
-
-## Nom du protocole
-
-**NKP1 — Neko Protocol v1**
-
----
