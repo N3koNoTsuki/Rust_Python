@@ -1,5 +1,4 @@
 import socket
-import time
 import neko_no_lib as nl
 from arduino.app_utils import *
 from arduino.app_bricks.web_ui import WebUI

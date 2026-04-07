@@ -13,7 +13,7 @@ La carte Arduino implémente les fonctions Modbus suivantes :
 
 On observe ci-dessous un échange complet entre le client et la carte Arduino capturé avec Wireshark.
 
-![Wireshark echanges](img/echanges.png "echanges")
+![Wireshark echanges](img/echange.png "echanges")
 
 ### Interprétation
 
