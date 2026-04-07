@@ -6,7 +6,7 @@ __pycache__/
 .pytest_cache/
 *.py[cod]
 
-tmp/
+**/tmp/
 
 # Distribution / packaging
 .Python
