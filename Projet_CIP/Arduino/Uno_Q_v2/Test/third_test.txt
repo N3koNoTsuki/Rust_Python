@@ -1,0 +1,10 @@
+arduino@NekoNOUnoQ:~/ArduinoApps/cip/python$ python3 main.py
+[INFO] : Server started on port 44818
+[INFO] : UDP server started on port 2222
+[INFO] : Connection from : 192.120.0.206:62755
+[INFO] : Received : 65000400000000000000000000000000000000000000000001000000 from : 192.120.0.206:62755
+[INFO] : Register Session command received from : 192.120.0.206:62755
+[INFO] : Received : 6f004800785634120000000000000000ed3e008000000000000000000000020000000000b2003800540220062401059c00000000ed7e5e00f68101002789986001000000204e00000348204e0000034881073404ffff0c000100810120062401 from : 192.120.0.206:62755
+[INFO] : Send RR Data command received from : 192.120.0.206:62755
+[INFO] : ForwardOpen: o_t=0xdead0001, t_o=0x5e7eed, active=True
+[WATCHDOG] No O→T data received for 0.5 seconds, closing connection

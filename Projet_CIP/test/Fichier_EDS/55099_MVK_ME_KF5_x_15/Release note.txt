@@ -1,0 +1,32 @@
+Release note 55099_MVK_ME_kfg_x_xx.zip
+Version: 1.00
+
+Murrelektronik GmbH
+Tel.: +49(0)7191-47-0
+Fax.: +49(0)7191-47-130
+E-mail: info@murrelektronik.com
+WWW: http://www.murrelektronik.com
+
+========================================================================================================
+Created by: TS
+
+========================================================================================================
+Archive Changes:
+
+V1.5     07/09/2019	TS	ADDED 	55099_MVK_ME_DIO8_DIO8_Omron.eds 
+V1.5     07/09/2019	TS	CHANGE	55099_MVK_ME_kfg_x_14.zip to CHange 55099_MVK_ME_kfg_x_15.zip
+
+========================================================================================================
+55099_MVK_ME_DIO8_DIO8.eds 
+Changes:
+
+V1.5 	07/09/2019	TS	CHANGE	Vendor Name Murrelektronik to Murrelektronik GmbH
+	
+========================================================================================================
+55099_MVK_ME_DIO8_DIO8_Omron.eds 
+Changes:
+
+V1.0 	07/09/2019	TS	ADDED	First Release
+
+
+

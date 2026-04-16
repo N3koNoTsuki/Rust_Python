@@ -1,0 +1,893 @@
+$ EZ-EDS Version 3.25.1.20181218 Generated Electronic Data Sheet
+
+[File]
+        DescText = "MVK-ME DIO8 (DIO8)";
+        CreateDate = 05-08-2013;
+        CreateTime = 23:00:30;
+        ModDate = 07-09-2019;
+        ModTime = 08:37:26;
+        Revision = 1.0;                 $ EDS revision.
+        HomeURL = "http://www.murrelektronik.com/en";
+
+[Device]
+        VendCode = 640;
+        VendName = "Murrelektronik GmbH";
+        ProdType = 7;
+        ProdTypeStr = "General Purpose Discrete I/O";
+        ProdCode = 55099;
+        MajRev = 1;
+        MinRev = 2;
+        ProdName = "MVK-ME DIO8 (DIO8)";
+        Catalog = "55099";
+        Icon = "MVK-ME.ico";
+        IconContents =
+                "AAABAAEAKEYAAAEAGAAoIwAAFgAAACgAAAAoAAAAjAAAAAEAGAAAAAAAAAAA"
+                "AGAAAABgAAAAAAAAAAAAAAD7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv6/Pr6"
+                "/Pr7/fv8/vz8/vz9//39//39//39//39//38/vz7/fv6/Pr6/Pr7/Pr7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv31tXj5Pv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv9//3////09fTm5+bd3dvU1NPT"
+                "0tHR0NDS0dDT0tDf397u7+38/vv////9//37/Pr7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fvk9d72+Pv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv2+Pfj4+HQzs7Fw8PDwMDBvb29u7uyrq63tLS5tbSyrq6yr66u"
+                "q6nKyMjV1NPn6Ob7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv1//f9"
+                "//v7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvPzcy3tLOw"
+                "rKyyrq6xra2xrq2uqqnQz8/p6ejFw8Ono6KalZSkoJ+uqqqwrK2+u7re3tz7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv9/f37/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu+urquqqqwray0sbGwra2vrKusqKfU"
+                "09L8/vzLysmsqaino6Kzr6+vq6utqamxrq7Qz877/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvDwMC7t7e4tbW3tbW2tLO4tLS3tLO5tbXOzczAvb23tLO3tbS2"
+                "srO3s7O2s7O5trbV1NP7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvCv7++urq+"
+                "u7rCvr7EwL+7uLi8ubm2srK2srK6t7e8ubnAvLzCvr26t7e6t7e5trbT09H7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvCv7+9ubm+u7qjoaGLiYmsqam6t7e8"
+                "ubm9urq7uLe7uLibmZmNi4uvq6u5tra5trbT09H7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvCv7+9ubm5trZZXF4XHSCWk5O3s7O7uLi7uLi6t7e1srJESEkc"
+                "Iyahnp64tbW5trbT09H7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvCv769ubm0"
+                "sbBdXmAwNjmbmZm3tLS7uLi6t7e6t7exrq1MTVA0OT2mpKO3tLS5trbT09H7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvCv7+8ubm8ubmuqqqjoJ+5tra7uLi7"
+                "uLi6t7e6t7e5trWopaWmo6O4tLS5tra5trbT09H7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvCv768ubm8ubm7uLi7uLi7uLi7uLi7uLi7t7e6t7e6t7e6t7e5"
+                "tra5tra5tra5trbU09L7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvBvr68ubm8"
+                "ubi7uLi8ubm7uLi7uLi7uLi6t7e6t7e6t7e6t7e5tra5tra5tra5trbU09L7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvBvr68uLi7uLi6t7e6t7e6t7e7uLi7"
+                "uLi7uLe6t7e5tra5tra4tbW4tbW4tbW5trbU09L7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvBvr6/vLy/vLy/vLy+vLy+u7u9urq7uLi6t7e7uLi9uru9urq8"
+                "ubm8ubm8ubm6t7fU09L7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvBvr6sqKir"
+                "qKippaWppaSrp6ewrKu6t7e6t7e3tLSppaSqp6aopaSopaSqpqazr6/U09L7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvCv7+wrayvrKytqaqtqaivq6uzr667"
+                "uLi7uLi4tbWtqqmuq6qsqKisqaiuq6u0sbHT0tH7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu/vLy7uLi6t7e9urq/u7u6uLi4tbW3tLS3tLS4tbW5tra8ubm9"
+                "urq5tra4tbW6t7fU09L7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvKx8e1srK3"
+                "tLSvrKuqpaWyr6+2s7Oyrq6yr6+yr6+2srOtqamppaWzsLCzsLCkoJ/Pzs37"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fve3Nu+u7uno6KFgX54dHGKhoSsp6e3"
+                "s7O1srK1srKinZyBfXp4dHGOi4muqqqKh4TEwsD7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fve3Nu6trVqZF9OSUNMR0FGQTtybWq5trW7t7erqKdhW1VOSUNL"
+                "R0FHQjt+eXaMiIfBv737/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fve3NuWkY9S"
+                "TUdUUEpQS0VRTUhJRD6gnJu6traCfXpRTUdVUEpPS0VSTUdJQz6AfHrBv737"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fve3Nt8d3NUT0lOSUNTTkhQS0VQS0WH"
+                "goC5trZnYl1VUEpNSEJTTkhOSUNPSkRoZGHBv737/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvd29qBfHhSTUdTTklRTEZQS0VPSkSUkI65trZsZ2JRTUdTTkhQ"
+                "S0VQS0ZLRkB3c3DBv737/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvd29qopaJN"
+                "SUJRTEZPSkRNSEJdV1O1srK5traVkY5LRkBRTEZPSkRNSEJpY16JhoTBv737"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvb2Ne+u7qQjYpiXVlYUk1sZ2Ojn565"
+                "tre3tLS0sLCJhIJeWlVYU05xbGmopKSOiojBwL77/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvCvr6cmJiXk5OCf31+eniHgoGbmJaVkpKWkpGYk5OUkI+AfHt+"
+                "eniJhYSZlpaTj47NzMv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvAvb2opaWn"
+                "o6Ksqamtq6qrp6ekoqCloqGloaGkoaCmo6KsqaisqamppaWin56tqanU09L7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fuwrKy8urnAvb2+u7u+u7u/u7vAvb2/"
+                "vLy/vLy/vLy+vLy9urq8ubm9urrBvr68uLnU09L7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/furqKi7uLe2s7O3tLS2s7O2srK1srK1srK1srK1srK1srK1srG1"
+                "sbG1sbGrqKecmJfNzMv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvU0tHU0dC1"
+                "srKzsLC0sbG1srK0sbG0sLCzsLCzsLC0sbGzsK+zr6+0sLCUkY90cG29vLn7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvf3dzg3965traxrq62s7K5tra3tLS3"
+                "s7K2srKzsK+4tbW0sbG0sbC2s7KWkpFwbGm2tbL7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvW1NPX1dS3tLS0sbG2s7O2s7O0sLCzsK+zr6+wra22s7K1srK1"
+                "sbG0sbGYlJN3c3C8u7j7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvDwL/DwL/H"
+                "xMO+u7q0sbDAvb25tra4tbW3tLS4tbXHw8K6t7e0sbK/vLuvrKuNiom/vrz7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu3tLS6t7bHw8J9f4BIS02rqKe7uLix"
+                "rq6xra29ubnCvr1tb3BNUFO2s7K3tLSvrKzNzMr7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu9urrAvby8uLdITU4bJCiRj466trW5tra5tbXBvr23s7M0ODob"
+                "JSiopaW1sbK4tbXV1NP7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu/vLy5trWd"
+                "mZeWk5N2dXazr66TjYq6t7e5tra0sLCfm5uKh4h9fH2vqqmYkpG4tbXU09L7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu/vLy4tbavrKu/u7u4s7O9urmopKO4"
+                "tbW4tbW0sLCwrKy7uLi5tbW2srKrp6e4tbXT0tH7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fvAvb22srKsqamopaWrp6eopaSrqai3tLS5trauq6usqKenpKSo"
+                "paWopKStqqq5trbT0tH7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu8uLi0sLCt"
+                "qamwrayzsK+uqqqtqqm0sLC1srKuq6utqamurKuwra2tqamtqqm1sbHV1NL7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu9urq4trbHxMPDv7+2srHGwsK7uLi3"
+                "s7O2s7O4tbXHw8PAvLu4tLTBvr65tba2srLV1NP7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu7uLi8ubjLyMeHhYZiY2Wuqqq9urq1srK1srK+u7vJxcR7eXhn"
+                "aWq1srK6t7e1srLS0dD7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu1srK6t7a5"
+                "tbRJTE4XISWRjo+0sa+xrq2xra29ubi1sbA0ODsaIyenpaSwraywrKzS0dD7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvBvr65tbWopKOFh4hYWVu2s7KZlJK7"
+                "uLi7uLi1srGppaR5e3xfYGG5trWdmJa6t7fU09L7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu+u7u5trakoJ+/vLvBvbyyrq2loJ+4tbW4tbW3s7SmoqG9ubjA"
+                "vbyqpaSrp6a4tbXT0tH7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu+u7uzsLCr"
+                "qKeopKSno6Kqp6aopKS2s7O4tbWtqamrp6eno6KmoqGrp6eqpqa4tbXT0tH7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu6t7a0sbGxra2vq6uwra2vrKywrKyz"
+                "r6+0sbCvrKywrKyuq6uvrKyvrKywrayzsLDT0tH7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu9urq4tbXCv77Cv76+u7u+u7y3tLS3tLS3tLS2s7PDv7/AvLu/"
+                "u7q9urq2s7K2s7PW1dT7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu3s7O4tbXJ"
+                "xcSTk5RnaGm0sbC5trayrq6yrq66t7jGwsGIiIltbm+6t7e2s7Oxra3S0dD7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu6t7a/vLvBvr1LTlEaIiaRjo6+u7q2"
+                "s7O2srLCvr27uLc4Oz4dJSmopqa4tbW0sbDT0tH7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu+vLu6t7ain515d3hWWFqno6KalZO5t7e5tra3tLOjn55ramtc"
+                "XmCsqKedmJa4tbTU09L7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu+u7u2s7Om"
+                "o6K9ubivqqrAvLydmJa3tLS4tbWysK+ppaS5tbW0sK+3srKinZy3tLTT0tH7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu/vLy2s7Oxra2uq6uxra2rqKiwra23"
+                "tLS5trayrq6wraytqqqvrKurp6ixrq+4tbXT0tH7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu8ubmxra2no6Kno6OopaSnpKOloaKzsLC2s7OsqKino6KmoqKn"
+                "o6Ono6OnpKO1srLU09L7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu5t7a1s7PA"
+                "vb3Cvr68ubi/vLy5t7ezsLCzsLC2s7PAvb3BvLy8ubm9urq3tLSzsLDW1dP7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu8urm6t7fNycihnp2CgIC5tbW6t7e3"
+                "tLS3tLS9ubnLx8aXk5OGhYW7uLi3tbW2s7PS0dH7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fuzr6+6t7e+urlMT1EfJyuQjY26travq6uvq6u+urq5tbQ5PD8h"
+                "KS2loqK1srKuqqrR0M/7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu/vLu5tbWt"
+                "qahtcHE2OTutrKuemZe6t7e6t7e2srKrp6ZdYGI9QEO5trWdmJi4tbXU09L7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu9u7q4tbWjnp65tbWyr6+0sK+gnJq5"
+                "tra6t7e4tbWloJ+0sbGzsbGsp6amoqG2s7PT0tH7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu9urqzsLCopKSuqqmvq6qrp6eno6KzsLCvrKytqqqopaStqamu"
+                "qqqppKSppaW2s7PT0tH7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu5t7ayr6+v"
+                "rKyrqKirqKiuqqqsqam8urrPzs6uq6uuq6urp6erqKiuq6uuqqqzsLDS0dD7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fu7ubi2s7O1srK2s7O3tLS3s7Oxrq7V"
+                "1dP19vTBvr62s7O1srK2s7O0sbG0sbG0sbHW1dT7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fu5t7a4tbW6t7e5tra4tbW0sbCrqKji4+H9//3HxcWwra23tLS4"
+                "tbW4tLS3tLS0sbHS0dD7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvHxsS3tLWy"
+                "rq60sbG2s7Owra2rqKfY2Nf8/vzCwcGtqam2s7O0sbGxra2xra29urrd3tz7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fvr7OrX1tbJyMbCwMC9urq3tLSxrq27"
+                "uLjW1tS5tre0sbG5t7a9u7rEwsHOzczh4d/3+ff7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv9//3////7/vzq6+ne3tzT0tHNy8rDwcHBv77KyMfQz87Y2Nbi"
+                "4+Hx8/L////////7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv6/Pr6+/r6"
+                "/Pr8/vz+//7////////////////////////+///9//37/fv5+/n6/Pr7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv6/Pr6/Pr6/Pr6"
+                "/Pr6/Pr6/Pr6/Pr6/Pr6/Pr7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7/fv7"
+                "/fsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==";
+
+[Device Classification]
+        Class1 = EtherNetIP;
+
+[Params]
+        Param1 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0100,                 $ Descriptor
+                0xC6,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Parameter Input/Output Pin 4",    $ name
+                "",                     $ units
+                "0 = Input; 1 = Output",$ help string
+                0,255,0,                $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param2 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0100,                 $ Descriptor
+                0xC6,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Parameter Input/Output Pin 2",    $ name
+                "",                     $ units
+                "0 = Input; 1 = Output",$ help string
+                0,255,0,                $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param4 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0002,                 $ Descriptor
+                0xC1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Parameter Data Format Pin/Port",    $ name
+                "",                     $ units
+                "0 = Pin based; 1 = Port based.",    $ help string
+                0,1,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Enum4 =
+                0,"0 = Pin based",
+                1,"1 = Port based.";
+
+        Param5 =                        $ Used for outputs
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xC6,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Data Input 0",         $ name
+                "",                     $ units
+                "",                     $ help string
+                0,0,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+
+        Param6 =                        $ Used for outputs
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xC6,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Data Input 1",         $ name
+                "",                     $ units
+                "",                     $ help string
+                0,0,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+
+        Param7 =                        $ Read only used for inputs
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0200,                 $ Descriptor
+                0xC6,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Data Output 0",        $ name
+                "",                     $ units
+                "",                     $ help string
+                0,0,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+
+        Param8 =                        $ Used for outputs
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0200,                 $ Descriptor
+                0xC6,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Data Output 1",        $ name
+                "",                     $ units
+                "",                     $ help string
+                0,0,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param9 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0200,                 $ Descriptor
+                0xC4,                   $ Data Type
+                4,                      $ Data Size in bytes
+                "Reserved32",           $ name
+                "",                     $ units
+                "New Help String",      $ help string
+                0,0,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param10 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0200,                 $ Descriptor
+                0xC7,                   $ Data Type
+                2,                      $ Data Size in bytes
+                "Reserved16",           $ name
+                "",                     $ units
+                "New Help String",      $ help string
+                0,0,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param11 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0200,                 $ Descriptor
+                0xC6,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Reserved8",            $ name
+                "",                     $ units
+                "New Help String",      $ help string
+                0,0,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param15 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xD1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - Input Short Circuit Port 0...7",    $ name
+                "",                     $ units
+                "",                     $ help string
+                0,255,0,                $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param17 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xC1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - Under Voltage Actuator Power",    $ name
+                "",                     $ units
+                "Actuator Power: 1 = Under Voltage",    $ help string
+                0,1,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param18 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xC1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - No Voltage Actuator Power",    $ name
+                "",                     $ units
+                "Actuator Power: 1 = No Voltage",    $ help string
+                0,1,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param20 =
+                0,                      $ reserved, shall equal 0
+                6,"20 65 24 01 30 04",  $ Link Path Size, Link Path
+                0x0212,                 $ Descriptor
+                0xC1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State -  No Voltage Sensor Power",    $ name
+                "",                     $ units
+                "Sensor Power: 1= No  Voltage",    $ help string
+                0,1,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Enum20 =
+                0,"Sensor Power Present",
+                1,"Sensor Power Under Volttage";
+        Param21 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xD1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - Actuator Short Circuit Ch00...Ch07",    $ name
+                "",                     $ units
+                "",                     $ help string
+                0,255,0,                $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param22 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xD1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - Actuator Short Circuit Ch10...17",    $ name
+                "",                     $ units
+                "",                     $ help string
+                0,255,0,                $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param24 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xC1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - Under Voltage Sensor Power",    $ name
+                "",                     $ units
+                "Sensor Power: 1 = Under Voltage",    $ help string
+                0,1,0,                  $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param25 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xD1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - Actuator Warning  Ch 00...07",    $ name
+                "",                     $ units
+                "New Help String",      $ help string
+                0,255,0,                $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param27 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0210,                 $ Descriptor
+                0xD1,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "State - Actuator Warning  Ch 10...17",    $ name
+                "",                     $ units
+                "New Help String",      $ help string
+                0,255,0,                $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+
+
+[Assembly]
+        Object_Name = "Assembly Object";
+        Object_Class_Code = 0x04;
+        Assem5 =
+                "Assembly 5",
+                ,
+                ,
+                0x0000,
+                ,,
+                8,Param5,
+                8,Param6;
+    $ Data from PLC to the Device
+        Assem35 =
+                "Assembly 35",
+                ,
+                ,
+                0x0000,
+                ,,
+                8,Param7,
+                8,Param8;
+        Assem105 =
+                "Assembly 105",
+                ,
+                ,
+                0x0000,
+                ,,
+                8,Param5,
+                8,Param6;
+        Assem109 =
+                "Config",
+                "20 04 24 6D 30 03",
+                ,
+                0x0000,
+                ,,
+                8,Param4,
+                8,Param1,
+                8,Param2,
+                8,Param11;
+        Assem110 =
+                "Config Assembly w/ byte length 0",
+                "20 04 24 6E 30 03",
+                ,
+                0x0000,
+                ,,
+                0,Param11;
+        Assem117 =
+                "Input Data w/ Diags",
+                "20 04 24 75 30 03",
+                ,
+                0x0000,
+                ,,
+                8,Param5,
+                8,Param6,
+                1,,
+                1,Param18,
+                1,Param24,
+                1,Param17,
+                4,,
+                8,Param15,
+                8,Param21,
+                8,Param22,
+                8,Param25,
+                8,Param27;
+        Assem118 =
+                "Input Data w/Diags",
+                ,
+                ,
+                0x0000,
+                ,,
+                8,Param5,
+                8,Param6,
+                1,,
+                1,Param18,
+                1,Param24,
+                1,Param17,
+                4,,
+                8,Param15,
+                8,Param21,
+                8,Param22,
+                8,Param25,
+                8,Param27;
+        Assem135 =
+                "Assembly 135",
+                ,
+                ,
+                0x0000,
+                ,,
+                8,Param7,
+                8,Param8;
+
+
+
+[Connection Manager]
+        Object_Name = "Connection Manager Object";
+        Object_Class_Code = 0x06;
+
+        Connection1 =
+                0x04010002,             $ 0-15    = supported transport classes
+                                        $ 16      = trigger: cyclic
+                                        $ 17      = trigger: change of state
+                                        $ 18      = trigger: application
+                                        $ 19-23   = trigger: reserved
+                                        $ 24      = transport type: listen-only
+                                        $ 25      = transport type: input-only
+                                        $ 26      = transport type: exclusive-owner
+                                        $ 27      = transport type: redundant-owner
+                                        $ 28-30   = reserved
+                                        $ 31      = Client = 0 / Server = 1
+                0x44640405,             $ 0       = O->T fixed size supported
+                                        $ 1       = O->T variable size supported
+                                        $ 2       = T->O fixed size supported
+                                        $ 3       = T->O variable size supported
+                                        $ 4-5     = O->T number of bytes per slot (obsolete)
+                                        $ 6-7     = T->O number of bytes per slot (obsolete)
+                                        $ 8-10    = O->T Real time transfer format
+                                        $ 11      = reserved
+                                        $ 12-14   = T->O Real time transfer format
+                                        $ 15      = reserved
+                                        $ 16      = O->T connection type: NULL
+                                        $ 17      = O->T connection type: MULTICAST
+                                        $ 18      = O->T connection type: POINT2POINT
+                                        $ 19      = O->T connection type: reserved
+                                        $ 20      = T->O connection type: NULL
+                                        $ 21      = T->O connection type: MULTICAST
+                                        $ 22      = T->O connection type: POINT2POINT
+                                        $ 23      = T->O connection type: reserved
+                                        $ 24      = O->T priority: LOW
+                                        $ 25      = O->T priority: HIGH
+                                        $ 26      = O->T priority: SCHEDULED
+                                        $ 27      = O->T priority: reserved
+                                        $ 28      = T->O priority: LOW
+                                        $ 29      = T->O priority: HIGH
+                                        $ 30      = T->O priority: SCHEDULED
+                                        $ 31      = T->O priority: reserved
+                ,,Assem35,              $ O->T RPI, size, format
+                ,,Assem5,               $ T->O RPI, size, format
+                ,,                      $ config #1 size, format
+                ,Assem109,              $ config #2 size, format
+                "Exclusive Owner w/o Diags - Config over EDS",    $ Connection Name
+                "",                     $ help string
+                "20 04 24 6D 2C 23 2C 05";    $ Path
+
+        Connection2 =
+                0x04010002,             $ 0-15    = supported transport classes
+                                        $ 16      = trigger: cyclic
+                                        $ 17      = trigger: change of state
+                                        $ 18      = trigger: application
+                                        $ 19-23   = trigger: reserved
+                                        $ 24      = transport type: listen-only
+                                        $ 25      = transport type: input-only
+                                        $ 26      = transport type: exclusive-owner
+                                        $ 27      = transport type: redundant-owner
+                                        $ 28-30   = reserved
+                                        $ 31      = Client = 0 / Server = 1
+                0x44640405,             $ 0       = O->T fixed size supported
+                                        $ 1       = O->T variable size supported
+                                        $ 2       = T->O fixed size supported
+                                        $ 3       = T->O variable size supported
+                                        $ 4-5     = O->T number of bytes per slot (obsolete)
+                                        $ 6-7     = T->O number of bytes per slot (obsolete)
+                                        $ 8-10    = O->T Real time transfer format
+                                        $ 11      = reserved
+                                        $ 12-14   = T->O Real time transfer format
+                                        $ 15      = reserved
+                                        $ 16      = O->T connection type: NULL
+                                        $ 17      = O->T connection type: MULTICAST
+                                        $ 18      = O->T connection type: POINT2POINT
+                                        $ 19      = O->T connection type: reserved
+                                        $ 20      = T->O connection type: NULL
+                                        $ 21      = T->O connection type: MULTICAST
+                                        $ 22      = T->O connection type: POINT2POINT
+                                        $ 23      = T->O connection type: reserved
+                                        $ 24      = O->T priority: LOW
+                                        $ 25      = O->T priority: HIGH
+                                        $ 26      = O->T priority: SCHEDULED
+                                        $ 27      = O->T priority: reserved
+                                        $ 28      = T->O priority: LOW
+                                        $ 29      = T->O priority: HIGH
+                                        $ 30      = T->O priority: SCHEDULED
+                                        $ 31      = T->O priority: reserved
+                ,,Assem35,              $ O->T RPI, size, format
+                ,,Assem117,             $ T->O RPI, size, format
+                ,,                      $ config #1 size, format
+                ,Assem109,              $ config #2 size, format
+                "Exclusive Owner w/ Diags - Config over EDS",    $ Connection Name
+                "",                     $ help string
+                "20 04 24 6D 2C 23 2C 75";    $ Path
+        Connection3 =
+                0x04010002,             $ 0-15    = supported transport classes
+                                        $ 16      = trigger: cyclic
+                                        $ 17      = trigger: change of state
+                                        $ 18      = trigger: application
+                                        $ 19-23   = trigger: reserved
+                                        $ 24      = application type: listen-only
+                                        $ 25      = application type: input-only
+                                        $ 26      = application type: exclusive-owner
+                                        $ 27      = application type: redundant-owner
+                                        $ 28-30   = reserved
+                                        $ 31      = Direction: Client = 0 / Server = 1
+                0x44640405,             $ 0       = O->T fixed size supported
+                                        $ 1       = O->T variable size supported
+                                        $ 2       = T->O fixed size supported
+                                        $ 3       = T->O variable size supported
+                                        $ 4-5     = O->T number of bytes per slot (obsolete)
+                                        $ 6-7     = T->O number of bytes per slot (obsolete)
+                                        $ 8-10    = O->T Real time transfer format
+                                        $ 11      = reserved
+                                        $ 12-14   = T->O Real time transfer format
+                                        $ 15      = reserved
+                                        $ 16      = O->T connection type: NULL
+                                        $ 17      = O->T connection type: MULTICAST
+                                        $ 18      = O->T connection type: POINT2POINT
+                                        $ 19      = O->T connection type: reserved
+                                        $ 20      = T->O connection type: NULL
+                                        $ 21      = T->O connection type: MULTICAST
+                                        $ 22      = T->O connection type: POINT2POINT
+                                        $ 23      = T->O connection type: reserved
+                                        $ 24      = O->T priority: LOW
+                                        $ 25      = O->T priority: HIGH
+                                        $ 26      = O->T priority: SCHEDULED
+                                        $ 27      = O->T priority: reserved
+                                        $ 28      = T->O priority: LOW
+                                        $ 29      = T->O priority: HIGH
+                                        $ 30      = T->O priority: SCHEDULED
+                                        $ 31      = T->O priority: reserved
+                ,,Assem35,              $ O->T RPI, size, format
+                ,,Assem5,               $ T->O RPI, size, format
+                ,,                      $ proxy config size, format
+                ,,                      $ target config size, format
+                "Exclusive Owner w/o Diags - Config over Web Server",    $ Connection Name
+                "",                     $ help string
+                "20 04 24 6E 2C 23 2C 05";    $ Path
+        Connection4 =
+                0x04010002,             $ 0-15    = supported transport classes
+                                        $ 16      = trigger: cyclic
+                                        $ 17      = trigger: change of state
+                                        $ 18      = trigger: application
+                                        $ 19-23   = trigger: reserved
+                                        $ 24      = application type: listen-only
+                                        $ 25      = application type: input-only
+                                        $ 26      = application type: exclusive-owner
+                                        $ 27      = application type: redundant-owner
+                                        $ 28-30   = reserved
+                                        $ 31      = Direction: Client = 0 / Server = 1
+                0x44640405,             $ 0       = O->T fixed size supported
+                                        $ 1       = O->T variable size supported
+                                        $ 2       = T->O fixed size supported
+                                        $ 3       = T->O variable size supported
+                                        $ 4-5     = O->T number of bytes per slot (obsolete)
+                                        $ 6-7     = T->O number of bytes per slot (obsolete)
+                                        $ 8-10    = O->T Real time transfer format
+                                        $ 11      = reserved
+                                        $ 12-14   = T->O Real time transfer format
+                                        $ 15      = reserved
+                                        $ 16      = O->T connection type: NULL
+                                        $ 17      = O->T connection type: MULTICAST
+                                        $ 18      = O->T connection type: POINT2POINT
+                                        $ 19      = O->T connection type: reserved
+                                        $ 20      = T->O connection type: NULL
+                                        $ 21      = T->O connection type: MULTICAST
+                                        $ 22      = T->O connection type: POINT2POINT
+                                        $ 23      = T->O connection type: reserved
+                                        $ 24      = O->T priority: LOW
+                                        $ 25      = O->T priority: HIGH
+                                        $ 26      = O->T priority: SCHEDULED
+                                        $ 27      = O->T priority: reserved
+                                        $ 28      = T->O priority: LOW
+                                        $ 29      = T->O priority: HIGH
+                                        $ 30      = T->O priority: SCHEDULED
+                                        $ 31      = T->O priority: reserved
+                ,,Assem35,              $ O->T RPI, size, format
+                ,,Assem117,             $ T->O RPI, size, format
+                ,,                      $ proxy config size, format
+                ,,                      $ target config size, format
+                "Exclusive Owner w/ Diags - Config over Web Server",    $ Connection Name
+                "",                     $ help string
+                "20 04 24 6E 2C 23 2C 75";    $ Path
+        Connection5 =
+                0x01010002,             $ 0-15    = supported transport classes
+                                        $ 16      = trigger: cyclic
+                                        $ 17      = trigger: change of state
+                                        $ 18      = trigger: application
+                                        $ 19-23   = trigger: reserved
+                                        $ 24      = application type: listen-only
+                                        $ 25      = application type: input-only
+                                        $ 26      = application type: exclusive-owner
+                                        $ 27      = application type: redundant-owner
+                                        $ 28-30   = reserved
+                                        $ 31      = Direction: Client = 0 / Server = 1
+                0x44240305,             $ 0       = O->T fixed size supported
+                                        $ 1       = O->T variable size supported
+                                        $ 2       = T->O fixed size supported
+                                        $ 3       = T->O variable size supported
+                                        $ 4-5     = O->T number of bytes per slot (obsolete)
+                                        $ 6-7     = T->O number of bytes per slot (obsolete)
+                                        $ 8-10    = O->T Real time transfer format
+                                        $ 11      = reserved
+                                        $ 12-14   = T->O Real time transfer format
+                                        $ 15      = reserved
+                                        $ 16      = O->T connection type: NULL
+                                        $ 17      = O->T connection type: MULTICAST
+                                        $ 18      = O->T connection type: POINT2POINT
+                                        $ 19      = O->T connection type: reserved
+                                        $ 20      = T->O connection type: NULL
+                                        $ 21      = T->O connection type: MULTICAST
+                                        $ 22      = T->O connection type: POINT2POINT
+                                        $ 23      = T->O connection type: reserved
+                                        $ 24      = O->T priority: LOW
+                                        $ 25      = O->T priority: HIGH
+                                        $ 26      = O->T priority: SCHEDULED
+                                        $ 27      = O->T priority: reserved
+                                        $ 28      = T->O priority: LOW
+                                        $ 29      = T->O priority: HIGH
+                                        $ 30      = T->O priority: SCHEDULED
+                                        $ 31      = T->O priority: reserved
+                ,0,,                    $ O->T RPI, size, format
+                ,,Assem105,             $ T->O RPI, size, format
+                ,,                      $ proxy config size, format
+                ,,                      $ target config size, format
+                "Listen Only w/o Diags",$ Connection Name
+                "",                     $ help string
+                "20 04 24 6E 2C 87 2C 69";    $ Path
+        Connection6 =
+                0x01010002,             $ 0-15    = supported transport classes
+                                        $ 16      = trigger: cyclic
+                                        $ 17      = trigger: change of state
+                                        $ 18      = trigger: application
+                                        $ 19-23   = trigger: reserved
+                                        $ 24      = application type: listen-only
+                                        $ 25      = application type: input-only
+                                        $ 26      = application type: exclusive-owner
+                                        $ 27      = application type: redundant-owner
+                                        $ 28-30   = reserved
+                                        $ 31      = Direction: Client = 0 / Server = 1
+                0x44240305,             $ 0       = O->T fixed size supported
+                                        $ 1       = O->T variable size supported
+                                        $ 2       = T->O fixed size supported
+                                        $ 3       = T->O variable size supported
+                                        $ 4-5     = O->T number of bytes per slot (obsolete)
+                                        $ 6-7     = T->O number of bytes per slot (obsolete)
+                                        $ 8-10    = O->T Real time transfer format
+                                        $ 11      = reserved
+                                        $ 12-14   = T->O Real time transfer format
+                                        $ 15      = reserved
+                                        $ 16      = O->T connection type: NULL
+                                        $ 17      = O->T connection type: MULTICAST
+                                        $ 18      = O->T connection type: POINT2POINT
+                                        $ 19      = O->T connection type: reserved
+                                        $ 20      = T->O connection type: NULL
+                                        $ 21      = T->O connection type: MULTICAST
+                                        $ 22      = T->O connection type: POINT2POINT
+                                        $ 23      = T->O connection type: reserved
+                                        $ 24      = O->T priority: LOW
+                                        $ 25      = O->T priority: HIGH
+                                        $ 26      = O->T priority: SCHEDULED
+                                        $ 27      = O->T priority: reserved
+                                        $ 28      = T->O priority: LOW
+                                        $ 29      = T->O priority: HIGH
+                                        $ 30      = T->O priority: SCHEDULED
+                                        $ 31      = T->O priority: reserved
+                ,0,,                    $ O->T RPI, size, format
+                ,,Assem118,             $ T->O RPI, size, format
+                ,,                      $ proxy config size, format
+                ,,                      $ target config size, format
+                "Listen Only w/ Diags", $ Connection Name
+                "",                     $ help string
+                "20 04 24 6E 2C 87 2C 76";    $ Path
+
+[Capacity]
+        ConnOverhead = .0;
+        MaxIOConnections = 5;
+        MaxMsgConnections = 6;
+        MaxConsumersPerMcast = 5;
+        TSpec1 = TxRx, 8, 2000;
+
+[DLR Class]
+        Revision = 1;
+        Object_Name = "Device Level Ring Object";
+        Object_Class_Code = 0x47;
+        MaxInst = 1;
+        Number_Of_Static_Instances = 1;
+        Max_Number_Of_Dynamic_Instances = 0;
+        Ring_Supervisor_Capable = No;
+
+[TCP/IP Interface Class]
+        Revision = 2;
+        Object_Name = "TCP/IP Interface Object";
+        Object_Class_Code = 0xF5;
+        MaxInst = 1;
+        Number_Of_Static_Instances = 1;
+        Max_Number_Of_Dynamic_Instances = 0;
+
+[Ethernet Link Class]
+        Revision = 3;
+        Object_Name = "Ethernet Link Object";
+        Object_Class_Code = 0xF6;
+        MaxInst = 2;
+        Number_Of_Static_Instances = 2;
+        Max_Number_Of_Dynamic_Instances = 0;
+        InterfaceLabel1 = "Port 1";
+        InterfaceLabel2 = "Port 2";
+        InterfaceType1 = 2;             $ 2=Twisted Pair
+        InterfaceType2 = 2;             $ 2=Twisted Pair
+
+

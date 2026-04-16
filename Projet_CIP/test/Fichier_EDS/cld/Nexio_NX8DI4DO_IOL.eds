@@ -1,0 +1,653 @@
+$ EZ-EDS Version 3.36 Generated Electronic Data Sheet
+$
+$ ==============================================================================
+$ DESCRIPTION DU PRODUIT : Nexio NX-8DI4DO-IOL
+$ ==============================================================================
+$
+$ Le Nexio NX-8DI4DO-IOL est un module d'I/O compact sur rail DIN pour réseaux
+$ EtherNet/IP. Il intègre dans un seul boîtier :
+$
+$   - 8 entrées numériques 24V DC (NPN/PNP), bornes à vis M3
+$       . Groupe A : X0.0 à X0.3  (filtre antirebond configurable)
+$       . Groupe B : X0.4 à X0.7  (filtre antirebond configurable)
+$       . Indicateur LED vert par canal
+$
+$   - 4 sorties numériques PNP 24V DC, 0.5A max, bornes à vis M3
+$       . Canaux Y0.0 à Y0.3
+$       . Protection court-circuit électronique (fold-back)
+$       . Comportement sur perte de connexion configurable par canal
+$       . Indicateur LED vert (actif) / rouge (défaut) par canal
+$
+$   - 1 port IO-Link Master, classe A, M12 5 broches (port X1)
+$       . Vitesse : COM1 (4.8 kbaud) / COM2 (38.4 kbaud) / COM3 (230.4 kbaud)
+$       . Process Data jusqu'à 1 octet input / 1 octet output
+$       . Validation de device et Data Storage optionnels
+$       . Fallback Digital Input si IO-Link désactivé
+$
+$   - 1 port Ethernet M12 D-code femelle, 10/100 Mbit/s
+$
+$   - Alimentation séparée :
+$       . US = 24V DC ±20%  (alimentation capteurs + logique)
+$       . UA = 24V DC ±20%  (alimentation actionneurs)
+$
+$   - Gabarit : 50 x 100 x 75 mm, montage rail DIN EN60715
+$
+$ CONNEXIONS EIP DISPONIBLES :
+$   E1 : Exclusive Owner - 8DI + 4DO
+$   E2 : Exclusive Owner - 8DI + 4DO + IO-Link 1 octet
+$   I1 : Input Only     - 8DI
+$   I2 : Input Only     - 8DI + IO-Link 1 octet
+$   L1 : Listen Only    - 8DI
+$
+$ Référence produit : NX-8DI4DO-IOL
+$ VendCode : 1234  |  ProdCode : 2001
+$ ==============================================================================
+
+[File]
+        DescText   = "Nexio NX-8DI4DO-IOL EtherNet/IP Module";
+        CreateDate = 04-14-2026;
+        CreateTime = 10:00:00;
+        ModDate    = 04-14-2026;
+        ModTime    = 10:00:00;
+        Revision   = 1.0;
+        HomeURL    = "www.nexio-automation.com";
+
+[Device]
+        VendCode    = 1234;
+        VendName    = "Nexio Automation";
+        ProdType    = 7;                    $ Generic Device
+        ProdTypeStr = "Generic Device";
+        ProdCode    = 2001;
+        MajRev      = 1;
+        MinRev      = 0;
+        ProdName    = "NX-8DI4DO-IOL";
+        Catalog     = "NX-8DI4DO-IOL";
+        Icon        = "NexioIO.ico";
+
+[Device Classification]
+        Class1 = EtherNetIP;
+
+$ ==============================================================================
+$ PARAMETRES
+$ ==============================================================================
+[Params]
+
+        $ ------------------------------------------------------------------
+        $ GROUPE : Entrées numériques
+        $ ------------------------------------------------------------------
+
+        Param1 =
+                0,
+                ,,
+                0x0000,                 $ Lecture / Écriture
+                0xC6,                   $ USINT (1 octet)
+                1,
+                "Input Filter Group A", $ X0.0 à X0.3
+                "ms",
+                "Temps de filtre antirebond pour les entrées X0.0 a X0.3",
+                1, 15, 3,               $ min=1ms  max=15ms  defaut=3ms
+                ,,,,
+                ,,,,
+                ;
+        Enum1 =
+                1,  "1 ms",
+                3,  "3 ms",
+                10, "10 ms",
+                15, "15 ms";
+
+        Param2 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "Input Filter Group B", $ X0.4 à X0.7
+                "ms",
+                "Temps de filtre antirebond pour les entrées X0.4 a X0.7",
+                1, 15, 3,
+                ,,,,
+                ,,,,
+                ;
+        Enum2 =
+                1,  "1 ms",
+                3,  "3 ms",
+                10, "10 ms",
+                15, "15 ms";
+
+        $ ------------------------------------------------------------------
+        $ GROUPE : Comportement des sorties sur perte de connexion EIP
+        $ ------------------------------------------------------------------
+
+        Param3 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "Output Fault Action Y0.0",
+                "",
+                "Etat de la sortie Y0.0 en cas de perte de connexion EIP",
+                0, 2, 0,
+                ,,,,
+                ,,,,
+                ;
+        Enum3 =
+                0, "Force OFF (0)",
+                1, "Force ON  (1)",
+                2, "Hold Last State";
+
+        Param4 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "Output Fault Action Y0.1",
+                "",
+                "Etat de la sortie Y0.1 en cas de perte de connexion EIP",
+                0, 2, 0,
+                ,,,,
+                ,,,,
+                ;
+        Enum4 =
+                0, "Force OFF (0)",
+                1, "Force ON  (1)",
+                2, "Hold Last State";
+
+        Param5 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "Output Fault Action Y0.2",
+                "",
+                "Etat de la sortie Y0.2 en cas de perte de connexion EIP",
+                0, 2, 0,
+                ,,,,
+                ,,,,
+                ;
+        Enum5 =
+                0, "Force OFF (0)",
+                1, "Force ON  (1)",
+                2, "Hold Last State";
+
+        Param6 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "Output Fault Action Y0.3",
+                "",
+                "Etat de la sortie Y0.3 en cas de perte de connexion EIP",
+                0, 2, 0,
+                ,,,,
+                ,,,,
+                ;
+        Enum6 =
+                0, "Force OFF (0)",
+                1, "Force ON  (1)",
+                2, "Hold Last State";
+
+        $ ------------------------------------------------------------------
+        $ GROUPE : Port IO-Link X1
+        $ ------------------------------------------------------------------
+
+        Param7 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "IO-Link X1 Mode",
+                "",
+                "Mode de fonctionnement du port IO-Link X1",
+                0, 3, 2,                $ defaut = IO-Link Autostart
+                ,,,,
+                ,,,,
+                ;
+        Enum7 =
+                0, "Deactivated",
+                1, "IO-Link Manual Configuration",
+                2, "IO-Link Autostart",
+                3, "Digital Input";
+
+        Param8 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "IO-Link X1 Cycle Time",
+                "",
+                "Cycle IO-Link (0 = le plus rapide supporte par le device)",
+                0, 191, 0,              $ 0 = auto, 1-191 = valeur encodée IO-Link
+                ,,,,
+                ,,,,
+                ;
+
+        Param9 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "IO-Link X1 Validation & Backup",
+                "",
+                "Controle la validation du device IO-Link connecte et le Data Storage",
+                0, 4, 0,
+                ,,,,
+                ,,,,
+                ;
+        Enum9 =
+                0, "No Device Check",
+                1, "Type compatible V1.0",
+                2, "Type compatible V1.1",
+                3, "Type compatible V1.1 + Backup & Restore",
+                4, "Type compatible V1.1 + Restore only";
+
+        Param10 =
+                0,
+                ,,
+                0x0000,
+                0xC7,                   $ UINT (2 octets)
+                2,
+                "IO-Link X1 Vendor ID",
+                "",
+                "VendorID du device IO-Link attendu (si Validation activee)",
+                0, 65535, 0,
+                ,,,,
+                ,,,,
+                ;
+
+        Param11 =
+                0,
+                ,,
+                0x0000,
+                0xC8,                   $ UDINT (4 octets)
+                4,
+                "IO-Link X1 Device ID",
+                "",
+                "DeviceID (24 bits utiles) du device IO-Link attendu",
+                0, 16777215, 0,
+                ,,,,
+                ,,,,
+                ;
+
+        $ ------------------------------------------------------------------
+        $ DONNEES I/O (lecture seule, présentes dans les assemblées)
+        $ ------------------------------------------------------------------
+
+        Param50 =
+                0,
+                ,,
+                0x0010,                 $ Lecture seule
+                0xD1,                   $ BYTE (1 octet, 8 bits)
+                1,
+                "Digital Inputs X0",
+                "",
+                "Etat des 8 entrees numeriques X0.0 a X0.7",
+                ,,0,
+                ,,,,
+                ,,,,
+                ;
+
+        Param51 =
+                0,
+                ,,
+                0x0000,                 $ Lecture / Écriture
+                0xD1,                   $ BYTE (1 octet, 4 bits utiles)
+                1,
+                "Digital Outputs Y0",
+                "",
+                "Commande des 4 sorties numeriques Y0.0 a Y0.3 (bits 4-7 ignores)",
+                ,,0,
+                ,,,,
+                ,,,,
+                ;
+
+        Param52 =
+                0,
+                ,,
+                0x0010,                 $ Lecture seule
+                0xD1,                   $ BYTE
+                1,
+                "IO-Link X1 Input Data",
+                "",
+                "Octet de donnees en entree depuis le device IO-Link sur X1",
+                ,,0,
+                ,,,,
+                ,,,,
+                ;
+
+        Param53 =
+                0,
+                ,,
+                0x0000,
+                0xD1,                   $ BYTE
+                1,
+                "IO-Link X1 Output Data",
+                "",
+                "Octet de donnees en sortie vers le device IO-Link sur X1",
+                ,,0,
+                ,,,,
+                ,,,,
+                ;
+
+        Param54 =
+                0,
+                ,,
+                0x0010,                 $ Lecture seule
+                0xD2,                   $ WORD (2 octets)
+                2,
+                "IO-Link X1 Status",
+                "",
+                "Bits de statut du port IO-Link X1 (DevCom / DevErr / PQ / ...)",
+                ,,0,
+                ,,,,
+                ,,,,
+                ;
+
+        Param55 =
+                0,
+                ,,
+                0x0010,
+                0xD1,                   $ BYTE
+                1,
+                "Output Status Y0",
+                "",
+                "Statut des sorties (bit=1 : court-circuit detecte sur ce canal)",
+                ,,0,
+                ,,,,
+                ,,,,
+                ;
+
+        $ ------------------------------------------------------------------
+        $ RPI (Requested Packet Interval)
+        $ ------------------------------------------------------------------
+
+        Param100 =
+                0,
+                ,,
+                0x0000,
+                0xC8,                   $ UDINT
+                4,
+                "RPI Value",
+                "us",
+                "Intervalle de rafraichissement demande (min 1 ms, max 3.2 s)",
+                1000, 3200000, 10000,   $ defaut = 10 ms
+                ,,,,
+                ,,,,
+                ;
+
+        Param101 =
+                0,
+                ,,
+                0x0000,
+                0xC6,
+                1,
+                "ListenOnly ConnPoint",
+                "",
+                "Point de connexion heartbeat pour les connexions Listen-Only",
+                192, 192, 192,
+                ,,,,
+                ,,,,
+                ;
+
+$ ==============================================================================
+$ GROUPES DE PARAMETRES (affichage dans l'outil de configuration)
+$ ==============================================================================
+[Groups]
+        Group1 =
+                "Entrees numeriques",
+                2,
+                1, 2;
+
+        Group2 =
+                "Comportement sur defaut EIP",
+                4,
+                3, 4, 5, 6;
+
+        Group3 =
+                "Port IO-Link X1",
+                5,
+                7, 8, 9, 10, 11;
+
+$ ==============================================================================
+$ ASSEMBLEES D'I/O
+$
+$ Carte de l'espace I/O du NX-8DI4DO-IOL :
+$
+$ INPUTS (T->O, du module vers le PLC) :
+$   Assem100 "Digital Inputs"               = 2 octets
+$     Octet 0 : Param50 (X0.0 à X0.7, 8 entrées)
+$     Octet 1 : Param55 (Y0 Output Status,  4 bits) + 4 bits padding
+$
+$   Assem101 "Inputs + IO-Link"             = 5 octets
+$     Octets 0-1 : Assem100 (réutilisation)
+$     Octet  2   : Param52  (IO-Link Input Data)
+$     Octets 3-4 : Param54  (IO-Link Status, WORD)
+$
+$ OUTPUTS (O->T, du PLC vers le module) :
+$   Assem110 "Digital Outputs"              = 1 octet
+$     Octet 0 : Param51 (Y0.0 à Y0.3, 4 sorties + 4 bits padding)
+$
+$   Assem111 "Outputs + IO-Link"            = 2 octets
+$     Octet 0 : Assem110 (réutilisation)
+$     Octet 1 : Param53  (IO-Link Output Data)
+$
+$ CONFIGURATION (envoyée une fois au Forward Open) :
+$   Assem170 "Configuration"                = 8 octets
+$     Octet 0 : Param1  (Filter Group A)
+$     Octet 1 : Param2  (Filter Group B)
+$     Octet 2 : Param3  (Fault Action Y0.0)
+$     Octet 3 : Param4  (Fault Action Y0.1)
+$     Octet 4 : Param5  (Fault Action Y0.2)
+$     Octet 5 : Param6  (Fault Action Y0.3)
+$     Octet 6 : Param7  (IO-Link Mode)
+$     Octet 7 : Param8  (IO-Link Cycle Time)
+$ ==============================================================================
+[Assembly]
+        Object_Name       = "Assembly Object";
+        Object_Class_Code = 0x04;
+
+        $ -----------------------------------------------------------
+        $ Instance 100 : Inputs  - 8 DI + statut sorties  (2 octets)
+        $ -----------------------------------------------------------
+        Assem100 =
+                "Digital Inputs",
+                ,
+                2,
+                0x0000,
+                ,,
+                8, Param50,     $ Octet 0 : X0.0 (bit0) à X0.7 (bit7)
+                4, Param55,     $ Octet 1 bits 0-3 : court-circuit Y0.0-Y0.3
+                4, ;            $ Octet 1 bits 4-7 : réservé
+
+        $ -----------------------------------------------------------
+        $ Instance 101 : Inputs + IO-Link  (5 octets)
+        $ -----------------------------------------------------------
+        Assem101 =
+                "Digital Inputs + IO-Link",
+                ,
+                5,
+                0x0000,
+                ,,
+                16, Assem100,   $ Octets 0-1 : reprise Assem100
+                8,  Param52,    $ Octet 2    : IO-Link Input Data
+                16, Param54;    $ Octets 3-4 : IO-Link Status (DevCom/DevErr/PQ)
+
+        $ -----------------------------------------------------------
+        $ Instance 110 : Outputs - 4 DO  (1 octet)
+        $ -----------------------------------------------------------
+        Assem110 =
+                "Digital Outputs",
+                ,
+                1,
+                0x0000,
+                ,,
+                4, Param51,     $ Bits 0-3 : Y0.0 (bit0) à Y0.3 (bit3)
+                4, ;            $ Bits 4-7 : réservé (toujours 0)
+
+        $ -----------------------------------------------------------
+        $ Instance 111 : Outputs + IO-Link  (2 octets)
+        $ -----------------------------------------------------------
+        Assem111 =
+                "Digital Outputs + IO-Link",
+                ,
+                2,
+                0x0000,
+                ,,
+                8, Assem110,    $ Octet 0 : reprise Assem110
+                8, Param53;     $ Octet 1 : IO-Link Output Data
+
+        $ -----------------------------------------------------------
+        $ Instance 170 : Configuration  (8 octets)
+        $ Transmis une seule fois lors du Forward Open (établissement connexion)
+        $ -----------------------------------------------------------
+        Assem170 =
+                "Configuration",
+                ,
+                8,
+                0x0000,
+                ,,
+                8, Param1,      $ Octet 0 : filtre entrées groupe A
+                8, Param2,      $ Octet 1 : filtre entrées groupe B
+                8, Param3,      $ Octet 2 : fault action Y0.0
+                8, Param4,      $ Octet 3 : fault action Y0.1
+                8, Param5,      $ Octet 4 : fault action Y0.2
+                8, Param6,      $ Octet 5 : fault action Y0.3
+                8, Param7,      $ Octet 6 : IO-Link mode
+                8, Param8;      $ Octet 7 : IO-Link cycle time
+
+$ ==============================================================================
+$ CONNEXIONS DISPONIBLES
+$
+$ Résumé des chemins CIP (format "20 04 24 <cfg> 2C <out> 2C <in>") :
+$   24 AA = Instance 170 (0xAA) : Configuration
+$   2C 6E = Instance 110 (0x6E) : Output DIO seul
+$   2C 6F = Instance 111 (0x6F) : Output DIO + IO-Link
+$   2C 64 = Instance 100 (0x64) : Input  DIO seul
+$   2C 65 = Instance 101 (0x65) : Input  DIO + IO-Link
+$   2C FE = Point fixe Input-Only
+$   2C [Param101] = Point Listen-Only (heartbeat)
+$ ==============================================================================
+[Connection Manager]
+        Revision    = 1;
+        Object_Name = "Connection Manager Object";
+        Object_Class_Code = 0x06;
+        MaxInst     = 1;
+        Number_Of_Static_Instances      = 1;
+        Max_Number_Of_Dynamic_Instances = 0;
+        PITNS       = Yes;
+
+        $ -----------------------------------------------------------
+        $ E1 : Exclusive Owner - 8 DI + 4 DO  (sans IO-Link)
+        $ Usage : commande standard, IO-Link non utilisé ou en Digital Input
+        $ Input  (T->O) : Assem100 = 2 octets  (DI + statut sorties)
+        $ Output (O->T) : Assem110 = 1 octet   (DO)
+        $ Config        : Assem170 = 8 octets
+        $ -----------------------------------------------------------
+        Connection1 =
+                0x04010002,             $ Classe 1+3 | Cyclic | Exclusive-Owner | Server
+                0x44640405,             $ Taille fixe O->T et T->O | Point-to-point | Scheduled
+                Param100,,Assem110,     $ O->T : RPI=Param100, taille auto, Assem110
+                Param100,,Assem100,     $ T->O : RPI=Param100, taille auto, Assem100
+                ,,                      $ Pas de config proxy
+                ,Assem170,             $ Config target : Assem170
+                "E1 - 8DI + 4DO",
+                "Connexion exclusive, 8 entrees + 4 sorties, sans IO-Link",
+                "20 04 24 AA 2C 6E 2C 64";
+
+        $ -----------------------------------------------------------
+        $ E2 : Exclusive Owner - 8 DI + 4 DO + IO-Link 1 octet
+        $ Usage : module IO-Link connecté sur X1
+        $ Input  (T->O) : Assem101 = 5 octets  (DI + statut + IOL data + IOL status)
+        $ Output (O->T) : Assem111 = 2 octets  (DO + IOL output data)
+        $ Config        : Assem170 = 8 octets
+        $ -----------------------------------------------------------
+        Connection2 =
+                0x04010002,
+                0x44640405,
+                Param100,,Assem111,     $ O->T : Assem111 (DO + IOL out)
+                Param100,,Assem101,     $ T->O : Assem101 (DI + IOL in + IOL status)
+                ,,
+                ,Assem170,
+                "E2 - 8DI + 4DO + IOL",
+                "Connexion exclusive, 8 entrees + 4 sorties + IO-Link 1 octet",
+                "20 04 24 AA 2C 6F 2C 65";
+
+        $ -----------------------------------------------------------
+        $ I1 : Input Only - 8 DI seul
+        $ Usage : lecture des entrées sans contrôle des sorties
+        $ Le champ O->T a une taille de 0 (pas de données envoyées vers le module)
+        $ -----------------------------------------------------------
+        Connection3 =
+                0x02010002,             $ Classe 1+3 | Cyclic | Input-Only | Server
+                0x44640305,             $ T->O fixe, O->T NULL, Point-to-point
+                ,0,,                    $ O->T : 0 octet (pas de sortie)
+                Param100,,Assem100,     $ T->O : Assem100
+                ,,
+                ,,                      $ Input-Only : pas de config envoyée
+                "I1 - Input Only 8DI",
+                "Lecture seule des 8 entrees, aucune sortie commandee",
+                "20 04 24 01 2C FE 2C 64";
+
+        $ -----------------------------------------------------------
+        $ I2 : Input Only - 8 DI + IO-Link
+        $ -----------------------------------------------------------
+        Connection4 =
+                0x02010002,
+                0x44640305,
+                ,0,,
+                Param100,,Assem101,     $ T->O : Assem101 (DI + IOL)
+                ,,
+                ,,
+                "I2 - Input Only 8DI + IOL",
+                "Lecture seule des 8 entrees et des donnees IO-Link",
+                "20 04 24 01 2C FE 2C 65";
+
+        $ -----------------------------------------------------------
+        $ L1 : Listen Only - 8 DI
+        $ Usage : écoute passive d'une connexion E1 ou E2 déjà active
+        $ Le ConnPoint est fourni par Param101 (valeur 192 = 0xC0)
+        $ -----------------------------------------------------------
+        Connection5 =
+                0x01010002,             $ Classe 1+3 | Cyclic | Listen-Only | Server
+                0x44640305,
+                ,0,,                    $ O->T : 0 octet
+                Param100,,Assem100,     $ T->O : Assem100
+                ,,
+                ,,
+                "L1 - Listen Only 8DI",
+                "Ecoute passive, necessite une connexion E1 ou E2 active",
+                "20 04 24 01 2C [Param101] 2C 64";
+
+[Port]
+        Port1 =
+                TCP,
+                "TCP/IP",
+                "20 F5 24 01",
+                1;
+
+[Capacity]
+        ConnOverhead         = 0.1;
+        MaxIOConnections     = 3;       $ Max 3 connexions I/O simultanées
+        MaxMsgConnections    = 6;       $ Max 6 connexions message (classe 3)
+        MaxConsumersPerMcast = 1;
+        TSpec1               = TxRx, 40, 100;   $ Max 40 octets, min 100 us
+
+[TCP/IP Interface Class]
+        Revision                        = 4;
+        MaxInst                         = 1;
+        Number_Of_Static_Instances      = 1;
+        Max_Number_Of_Dynamic_Instances = 0;
+
+[Ethernet Link Class]
+        Revision                        = 4;
+        MaxInst                         = 1;
+        Number_Of_Static_Instances      = 1;
+        Max_Number_Of_Dynamic_Instances = 0;
+        InterfaceLabel1                 = "Eth1";
+        InterfaceType1                  = 2;    $ Twisted pair
