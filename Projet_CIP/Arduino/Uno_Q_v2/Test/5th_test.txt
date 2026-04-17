@@ -1,0 +1,106 @@
+arduino@NekoNOUnoQ:~/ArduinoApps/cip/python$ python3 main.py
+[INFO] : Server started on port 44818
+[INFO] : UDP server started on port 2222
+[INFO] : Connection from : 192.120.0.206:50867
+[INFO] : Received : 65000400000000000000000000000000000000000000000001000000 from : 192.120.0.206:50867
+[INFO] : Register Session command received from : 192.120.0.206:50867
+[INFO] : Received : 6f004800785634120000000000000000c114008000000000000000000000020000000000b2003800540220062401059c000000001f525f00288101002789986001000000204e00000348204e0000034881073404ffff0c000100810120062401 from : 192.120.0.206:50867
+[INFO] : Send RR Data command received from : 192.120.0.206:50867
+[INFO] : ForwardOpen: o_t=0xdead0001, t_o=0x5f521f, active=True
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[INFO] : Received : 6f001800785634120000000000000000c214008000000000000000000000020000000000b20008000e0320c024013012 from : 192.120.0.206:50867
+[INFO] : Send RR Data command received from : 192.120.0.206:50867
+[INFO] : Received : 6f001800785634120000000000000000c314008000000000000000000000020000000000b20008000e03200124013001 from : 192.120.0.206:50867
+[INFO] : Send RR Data command received from : 192.120.0.206:50867
+[INFO] : Received : 6f001800785634120000000000000000c614008000000000000000000000020000000000b20008000e0320c02401301d from : 192.120.0.206:50867
+[INFO] : Send RR Data command received from : 192.120.0.206:50867
+[IO] O→T: outputs=0x00
+[INFO] : Received : 6f001a00785634120000000000000000c714008000000000000000000000020000000000b2000a000e042100bc0324013002 from : 192.120.0.206:50867
+[INFO] : Send RR Data command received from : 192.120.0.206:50867
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[INFO] : Received : 6f001600785634120000000000000000c514008000000000000000000000020000000000b2000600010220012401 from : 192.120.0.206:50867
+[INFO] : Send RR Data command received from : 192.120.0.206:50867
+[IO] O→T: outputs=0x00
+[INFO] : Received : 6f001800785634120000000000000000c814008000000000000000000000020000000000b20008000e0320f624013006 from : 192.120.0.206:50867
+[INFO] : Send RR Data command received from : 192.120.0.206:50867
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+^C[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00
+[IO] O→T: outputs=0x00

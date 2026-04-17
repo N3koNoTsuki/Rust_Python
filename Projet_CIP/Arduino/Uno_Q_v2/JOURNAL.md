@@ -239,17 +239,20 @@ Classe `EIPUDPProtocol(asyncio.DatagramProtocol)` :
 - `connection_made` : stocke le transport
 - `datagram_received` : parse EIP header + CPF, extrait `run_idle_header` et `output_byte`, log, met à jour `last_ot_time` et `plc_addr`
 
-Structure O→T reçu (Connected Data) :
+Structure O→T reçu (UDP payload = CPF brut, pas de header EIP) :
 ```
-[0:4]   sequence_count (4B LE) — ignoré
-[4:8]   run_idle_header (4B LE) — bit 0 = RUN/IDLE
-[8]     output_byte (1B) — sorties PLC→device
+CPF item 0 : type=0x8002, 8B → conn_id (4B LE) + seq_count (4B LE)
+CPF item 1 : type=0x00B1, NB → Connected Data :
+    [0:4]  run_idle_header (4B LE) — bit 0 = RUN/IDLE
+    [4]    output_byte (1B)
 ```
 
 Coroutine `task_send_inputs(protocol, conn_state)` :
 - Skip si `active=False` ou `plc_ip` absent
 - Au premier passage actif : reset `last_ot_time = time.monotonic()` (flag `was_active`)
-- Construit T→O : CPF avec `CPF_CONNECTED_ADDR` (t_o_conn_id 4B LE) + `CPF_CONNECTED_DATA` (seq 4B + inputs 1B = 5 bytes)
+- Construit T→O : CPF brut (pas de header EIP) avec :
+  - `CPF_CONNECTED_ADDR` (0x8002) : t_o_conn_id (4B) + encap_seq (4B) = 8B
+  - `CPF_IO_DATA` (0x00B1) : inputs (1B)
 - Envoie vers `protocol.plc_addr or (conn_state['plc_ip'], 2222)`
 - Incrémente `encap_seq` (mod 2³²)
 - Sleep `rpi_t_o / 1_000_000` secondes
@@ -259,9 +262,12 @@ Coroutine `task_send_inputs(protocol, conn_state)` :
 - Variable `cpf` locale écrasait le module `cpf` importé → renommer en `items`
 - `last_ot_time = 0.0` → watchdog tirait immédiatement après ForwardOpen → fix : `time.monotonic()`
 - Race condition : protocole créé au démarrage, `last_ot_time` déjà vieux au moment du ForwardOpen → fix : reset dans `task_send_inputs` au premier cycle actif (`was_active` flag)
-- T→O : format incorrect avec `struct.pack('<IH', encap_seq, cip_seq)` (7B) → le PLC ignorait → fix : `struct.pack('<I', encap_seq) + bytes([inputs])` (5B, pas de cip_seq dans les données I/O brutes)
-- O→T parsing : offsets décalés de 2 (`[6:10]`/`[10]`) → fix : `[4:8]`/`[8]` (pas de cip_seq à skiper)
+- T→O enveloppé dans un header EIP (cmd=0x0070) → le PLC ignorait, Wireshark "malformed" → fix : UDP I/O = CPF brut seulement, PAS de header EIP
+- Item type 0x8001 (TCP connected data) utilisé → faux pour UDP I/O → fix : item type 0x00B1 (CPF I/O data)
+- Connected Address 4B (conn_id seulement) → faux → fix : 8B = conn_id + seq_count
+- Séquence count dans le Connected Data → faux → doit être dans le Connected Address (8B)
 - PLC ne démarrait pas l'O→T : `plc_addr=None` empêchait tout envoi T→O → cercle vicieux → fix : stocker `conn_state['plc_ip']` lors du ForwardOpen (TCP), l'utiliser comme destination par défaut
+- Source des formats corrects : analyse de captures réelles Rockwell PointIO (2015) présentes dans `test/Trame/`
 
 ---
 
@@ -318,18 +324,128 @@ Ajout de `conn_state['plc_ip'] = ip_str` dans le `case 0x54` (ForwardOpen).
 
 ---
 
+---
+
+## Phase 2 — Débogage échange I/O UDP (suite)
+
+### Problème : PLC boucle Connecting → Fault
+
+Après l'intégration de l'étape 11, le PLC acceptait le ForwardOpen mais bouclait sans jamais atteindre "Connected". Plusieurs bugs ont été identifiés et corrigés par analyse des captures Wireshark.
+
+#### Fix 1 — Code d'erreur CIP : `0x08` → `0x14`
+
+Dans `cip.py`, les `case _:` renvoyaient `0x08` (Service Not Supported), ce qui indiquait au PLC que `GetAttributeSingle` n'était pas du tout supporté → il abandonnait.
+
+Correct : `0x14` (Attribute Not Supported) pour un attribut inconnu d'un service supporté.
+
+```python
+# Avant
+return bytes([0x8E, 0x00, 0x08, 0x00])
+# Après
+return bytes([0x8E, 0x00, 0x14, 0x00])
+```
+
+#### Fix 2 — Attribut TCP/IP 0x12 manquant
+
+Le PLC interrogeait `class=0xC0, attr=0x12` (Encapsulation Inactivity Timeout, extension Rockwell) en boucle. Non géré → erreur → retry infini.
+
+Ajout dans le `case 0xC0` :
+```python
+case 0x12:  # Encapsulation Inactivity Timeout
+    data = 0x0000.to_bytes(2, 'little')
+```
+
+#### Fix 3 — ForwardOpen response : items socket address manquants
+
+La réponse ForwardOpen n'avait que 2 items CPF (`Null + UnconnectedData`). Rockwell exige **4 items** incluant les adresses socket O→T et T→O pour savoir où envoyer les paquets UDP.
+
+```python
+# Avant : 2 items
+cpf.build_cpf([(0x0000, b''), (0x00B2, cip_response)])
+
+# Après : 4 items
+sock_ot = b'\x00\x02\x08\xae\x00\x00\x00\x00' + b'\x00'*8  # port 2222, IP 0.0.0.0
+sock_to = b'\x00\x02\x08\xae' + socket.inet_aton(ip_str) + b'\x00'*8  # port 2222, IP PLC
+cpf.build_cpf([
+    (0x0000, b''),
+    (0x00B2, cip_response),
+    (0x8000, sock_ot),   # O→T Socket Address
+    (0x8001, sock_to)    # T→O Socket Address
+])
+```
+
+Structure sockaddr (16B) : `sin_port(2B BE)` + `sin_addr(4B BE)` + `padding(8B)`.
+
+#### Fix 4 — Format T→O : 1B → 3B
+
+Le PLC demandait une taille de 3B dans ses paramètres de connexion (`0x4803` = fixed, 3B). On n'envoyait qu'1B (les inputs bruts).
+
+Format correct du T→O Connected Data :
+```
+[0:2]  CIP Sequence Count (2B LE, incrémenté par paquet)
+[2]    Input data (1B)
+```
+
+Ajout du compteur `cip_seq` dans `EIPUDPProtocol` et passage à `struct.pack('<H', cip_seq) + bytes([inputs])`.
+
+#### Fix 5 — Watchdog : timeout trop court + race condition
+
+Timeout 0.5s trop court : le PLC est encore en phase "Validating" quand le watchdog coupe la connexion.
+
+Porté à 5.0s. De plus, race condition possible entre `task_send_inputs` et `task_watchdog` au moment où `active` passe à `True` (les deux lisent/écrivent `last_ot_time`).
+
+Fix : ajout du flag `was_active` dans `task_watchdog` (symétrique à `task_send_inputs`) pour garantir que `last_ot_time` est reset à l'activation quelle que soit l'ordre d'exécution des coroutines :
+
+```python
+async def task_watchdog(protocol, conn_state):
+    was_active = False
+    while True:
+        active = conn_state.get('active', False)
+        if active and not was_active:
+            protocol.last_ot_time = time.monotonic()
+            was_active = True
+        elif not active:
+            was_active = False
+        if active and (time.monotonic() - protocol.last_ot_time) > 5.0:
+            ...
+```
+
+#### Fix 6 — Parsing O→T : format simplifié
+
+Le format O→T réel de ce PLC n'a pas de `run_idle_header` (4B) — il envoie directement :
+```
+[0:2]  CIP Sequence Count (2B LE)
+[2]    Output data (1B)
+```
+
+Suppression de la logique run/idle, parsing direct :
+```python
+cip_seq = struct.unpack('<H', connected_data[0:2])[0]
+output_byte = connected_data[2]
+```
+
+Ajout d'une vérification du type de l'item 1 (`CPF_IO_DATA = 0x00B1`) avant parsing.
+
+### Améliorations qualité
+
+- **Logging structuré** : ajout de `import logging` dans tous les fichiers, remplacement de tous les `print()` par `log.info/debug/warning/error`
+- **argparse** dans `main.py` : flag `-v/--verbose` pour activer le niveau DEBUG
+- **Meilleure gestion des erreurs UDP** : vérification du nombre d'items CPF, du type de l'item I/O, de la longueur des données avant parsing
+
+---
+
 ## État actuel
 
 | Fichier | Contenu |
 |---------|---------|
 | `eip.py` | Header EIP, RegisterSession |
 | `cpf.py` | Common Packet Format |
-| `cip.py` | Identity Object, TCP/IP Object, Port Object, ForwardOpen, ForwardClose |
-| `main.py` | Serveur TCP, dispatcher EIP/CIP, intégration UDP |
-| `io_server.py` | Serveur UDP port 2222, réception O→T, envoi T→O, watchdog |
+| `cip.py` | Identity Object, TCP/IP Object (attr 1-3/5/0x12), Port Object, ForwardOpen, ForwardClose |
+| `main.py` | Serveur TCP, dispatcher EIP/CIP, intégration UDP, logging, argparse |
+| `io_server.py` | Serveur UDP port 2222, réception O→T, envoi T→O (3B), watchdog (5s, race-free) |
 
-**Phase 1 TCP complète ✓** — RegisterSession + ForwardOpen + ForwardClose fonctionnels.
+**Phase 1 TCP complète ✓** — RegisterSession + GetAttribute + ForwardOpen + ForwardClose fonctionnels.
 
-**Phase 2 UDP en cours** — T→O envoyé en continu, O→T pas encore reçu (débogage format en cours).
+**Phase 2 UDP complète ✓** — Échange I/O cyclique opérationnel. PLC atteint l'état "Connected".
 
-**Prochaine étape** : valider la réception O→T depuis le PLC Rockwell, puis intégrer `bridge.py` (UART Arduino).
+**Prochaine étape** : `bridge.py` — interface UART Arduino (SimulatedBridge + ArduinoBridge).

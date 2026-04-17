@@ -1,3 +1,5 @@
+$ EZ-EDS Version 3.38.20251024 Generated Electronic Data Sheet
+
 [File]
         DescText = "Arduino Uno Q - 5DI/5DO EtherNet/IP Adapter";
         CreateDate = 04-15-2026;
@@ -7,7 +9,7 @@
         Revision = 1.0;
 
 [Device]
-        VendCode = 0xFFFF;
+        VendCode = 65535;
         VendName = "Arduino";
         ProdType = 12;
         ProdTypeStr = "Communications Adapter";
@@ -20,6 +22,34 @@
 [Device Classification]
         Class1 = EtherNetIP;
 
+[Params]
+        Param1 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0000,                 $ Descriptor
+                0xC2,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Arduino Input",        $ name
+                "",                     $ units
+                "This will write input byte to the Arduino pin",    $ help string
+                ,,0,                    $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+        Param2 =
+                0,                      $ reserved, shall equal 0
+                ,,                      $ Link Path Size, Link Path
+                0x0000,                 $ Descriptor
+                0xC2,                   $ Data Type
+                1,                      $ Data Size in bytes
+                "Arduino output",       $ name
+                "",                     $ units
+                "This is what is arduino reading on his pin",    $ help string
+                ,,0,                    $ min, max, default data values
+                ,,,,                    $ mult, div, base, offset scaling
+                ,,,,                    $ mult, div, base, offset links
+                ;                       $ decimal places
+
 [Assembly]
         Object_Name = "Assembly Object";
         Object_Class_Code = 0x04;
@@ -28,22 +58,22 @@
                 ,
                 1,
                 0x0100,
-                ,
-				;
+                ,,
+                8,Param1;
         Assem101 =
                 "Input Data",
                 ,
                 1,
                 0x0000,
-                ,
-				;
+                ,,
+                8,Param2;
         Assem102 =
                 "Configuration",
                 ,
                 ,
                 0x0000,
-                ,
-				;
+                ,,
+                1,;
 
 [Connection Manager]
         Object_Name = "Connection Manager Object";
@@ -93,3 +123,4 @@
                 "Normal connection",    $ Connection Name
                 "Aruduino Adapter",     $ help string
                 "20 06 24 01";          $ Path
+
