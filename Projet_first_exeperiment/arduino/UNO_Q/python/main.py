@@ -1,6 +1,7 @@
 from arduino.app_utils import *
 import time
 import neko_no_lib as nl
+
 from arduino.app_bricks.web_ui import WebUI
 
 Grenoble = nl.City(name="Grenoble", lat=45.18, lon=5.72)

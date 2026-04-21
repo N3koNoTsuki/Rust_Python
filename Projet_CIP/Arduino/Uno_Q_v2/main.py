@@ -12,6 +12,8 @@ Usage :
 """
 
 import asyncio
+import threading
+import time
 import io_server as io
 import eip
 import cpf
@@ -19,9 +21,30 @@ import cip
 import socket
 import logging
 import argparse
+from arduino.app_utils import Bridge, App
 
 
-conn_state = {'active': False}
+
+def linux_started():
+    return True
+
+
+conn_state = {'active': False, 'input_data': 0, 'output_data': 0}
+
+def receive_cip_data(data):
+    conn_state['input_data'] = int(data) & 0xFF
+    log.info(f"Received CIP data from Arduino: {conn_state['input_data']:#04x}")
+
+def send_cip_data() -> int:
+    val = conn_state['output_data'] & 0xFF
+    log.info(f"send_cip_data called, returning: {val:#04x}")
+    return val
+
+
+
+Bridge.provide("linux_started", linux_started)
+Bridge.provide("receive_cip_data", receive_cip_data)
+Bridge.provide("send_cip_data", send_cip_data)
 
 def setup_logging(level: str) -> None:
     """Configure le niveau de logging global avec timestamp ms.
@@ -144,17 +167,16 @@ async def main() -> None:
     server = await asyncio.start_server(handle_client, '0.0.0.0', 44818)
     log.info("TCP server started on port 44818")
 
-    loop = asyncio.get_event_loop()
-    transport, protocol = await loop.create_datagram_endpoint(
-        lambda: io.EIPUDPProtocol(conn_state),
-        local_addr=('0.0.0.0', 2222)
-    )
+    udp_handler = io.start_udp_handler(conn_state)
     log.info("UDP server started on port 2222")
 
-    asyncio.create_task(io.task_send_inputs(protocol, conn_state))
-    asyncio.create_task(io.task_watchdog(protocol, conn_state))
+    asyncio.create_task(io.task_send_inputs(udp_handler, conn_state))
+    asyncio.create_task(io.task_watchdog(udp_handler, conn_state))
 
     await server.serve_forever()
+
+def loop():
+    time.sleep(0.1)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="EtherNet/IP CIP Adapter for Arduino")
@@ -168,4 +190,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     setup_logging(args.loglevel)
-    asyncio.run(main())
+    threading.Thread(target=asyncio.run, args=(main(),), daemon=True).start()
+    App.run(user_loop=loop)

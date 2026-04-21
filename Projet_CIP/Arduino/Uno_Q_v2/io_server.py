@@ -20,18 +20,20 @@ Tâches asyncio :
 
 import asyncio
 import struct
+import socket as _socket
+import threading
 import time
-import eip
 import cpf
 import logging
 
 log = logging.getLogger("io_server")
 
-class EIPUDPProtocol(asyncio.DatagramProtocol):
-    """Protocole UDP asyncio pour la réception des paquets O→T du PLC.
 
-    Instancié une seule fois au démarrage et partagé avec les tâches
-    task_send_inputs et task_watchdog via conn_state.
+class EIPUDPHandler:
+    """Gestion UDP via socket bloquant (thread dédié pour la réception).
+
+    Utilise un socket Python classique plutôt que asyncio.DatagramProtocol
+    pour éviter les problèmes de réception UDP dans un thread non-principal.
     """
 
     def __init__(self, conn_state: dict) -> None:
@@ -40,48 +42,64 @@ class EIPUDPProtocol(asyncio.DatagramProtocol):
         self.encap_seq = 0
         self.cip_seq = 0
         self.plc_addr = None
-        self.transport = None
+        self.sock = _socket.socket(_socket.AF_INET, _socket.SOCK_DGRAM)
+        self.sock.setsockopt(_socket.SOL_SOCKET, _socket.SO_REUSEADDR, 1)
+        self.sock.bind(('0.0.0.0', 2222))
+        self.sock.settimeout(1.0)
+        log.info(f"UDP socket bound to {self.sock.getsockname()}")
 
-    def connection_made(self, transport) -> None:
-        """Stocke le transport UDP pour l'envoi des paquets T→O."""
-        self.transport = transport
+    def send(self, packet: bytes, addr: tuple) -> None:
+        try:
+            self.sock.sendto(packet, addr)
+        except Exception as e:
+            log.error(f"UDP send error to {addr}: {e}")
 
-    def datagram_received(self, data: bytes, addr) -> None:
-        """Traite un datagramme O→T reçu du PLC.
+    def recv_loop(self) -> None:
+        """Boucle bloquante de réception O→T — à lancer dans un thread dédié."""
+        log.info("UDP recv thread started")
+        while True:
+            try:
+                data, addr = self.sock.recvfrom(4096)
+            except _socket.timeout:
+                continue
+            except Exception as e:
+                log.error(f"UDP recv error: {e}")
+                continue
 
-        Parse le CPF, vérifie le type de l'item I/O (0x00B1),
-        extrait CIP_seq et output_byte, met à jour last_ot_time et plc_addr.
-        Ignore silencieusement les paquets malformés.
-        """
-        log.debug(f"--- UDP Datagram received from {addr} ---")
-        log.debug(f"UDP RX ({len(data)}B): {data.hex()}")
-        
-        items = cpf.parse_cpf(data)
-        log.debug(f"CPF parsed items count: {len(items)}")
-        for i, (item_id, item_data) in enumerate(items):
-            log.debug(f"  -> Item {i}: Type=0x{item_id:04X}, Length={len(item_data)}, Payload={item_data.hex()}")
-            
-        if len(items) < 2:
-            log.warning("Less than 2 CPF items in UDP packet, ignoring.")
-            return
-            
-        item2_id, connected_data = items[1]
-        if item2_id != cpf.CPF_IO_DATA:
-            log.warning(f"UDP Item 1 ID is 0x{item2_id:04X}, expected 0x{cpf.CPF_IO_DATA:04X} (I/O Data), ignoring.")
-            return
-            
-        if len(connected_data) >= 3:
+            log.info(f"UDP RX ({len(data)}B) from {addr}")
+            log.debug(f"UDP RX hex: {data.hex()}")
+
+            items = cpf.parse_cpf(data)
+            if len(items) < 2:
+                log.warning("Less than 2 CPF items in UDP packet, ignoring.")
+                continue
+
+            item2_id, connected_data = items[1]
+            if item2_id != cpf.CPF_IO_DATA:
+                log.warning(f"UDP Item 1 ID is 0x{item2_id:04X}, expected 0x{cpf.CPF_IO_DATA:04X}, ignoring.")
+                continue
+
+            if len(connected_data) < 3:
+                log.warning(f"UDP connected data too short ({len(connected_data)} bytes), ignoring.")
+                continue
+
             cip_seq = struct.unpack('<H', connected_data[0:2])[0]
             output_byte = connected_data[2]
-        else:
-            log.warning(f"UDP connected data too short ({len(connected_data)} bytes), ignoring.")
-            return
-            
-        log.debug(f"O->T: CIP Seq={cip_seq}, Output=0x{output_byte:02X}")
-        self.last_ot_time = time.monotonic()
-        self.plc_addr = addr
+            log.debug(f"O->T: CIP Seq={cip_seq}, Output=0x{output_byte:02X}")
+            self.last_ot_time = time.monotonic()
+            self.plc_addr = addr
+            self.conn_state['output_data'] = output_byte
 
-async def task_send_inputs(protocol: EIPUDPProtocol, conn_state: dict):
+
+def start_udp_handler(conn_state: dict) -> EIPUDPHandler:
+    """Crée le handler UDP et démarre le thread de réception."""
+    handler = EIPUDPHandler(conn_state)
+    t = threading.Thread(target=handler.recv_loop, daemon=True, name="udp-recv")
+    t.start()
+    return handler
+
+
+async def task_send_inputs(handler: EIPUDPHandler, conn_state: dict):
     """Coroutine d'envoi cyclique des paquets T→O vers le PLC.
 
     Tourne en permanence. Attend que la connexion soit active (conn_state['active'])
@@ -97,36 +115,30 @@ async def task_send_inputs(protocol: EIPUDPProtocol, conn_state: dict):
             continue
 
         if not was_active:
-            protocol.last_ot_time = time.monotonic()
+            handler.last_ot_time = time.monotonic()
             was_active = True
 
-
-
-
-
-
-        inputs = 0x00  # TODO: read actual inputs
-
-
-
-
-
-
+        try:
+            inputs = int(conn_state.get('input_data', 0)) & 0xFF
+        except (TypeError, ValueError) as e:
+            log.error(f"input_data invalid ({conn_state.get('input_data')!r}): {e}")
+            inputs = 0
 
         packet = cpf.build_cpf([
-            (cpf.CPF_CONNECTED_ADDR, struct.pack('<II', conn_state.get('t_o_conn_id', 0), protocol.encap_seq)),
-            (cpf.CPF_IO_DATA, struct.pack('<H', protocol.cip_seq) + bytes([inputs]))
+            (cpf.CPF_CONNECTED_ADDR, struct.pack('<II', conn_state.get('t_o_conn_id', 0), handler.encap_seq)),
+            (cpf.CPF_IO_DATA, struct.pack('<H', handler.cip_seq) + bytes([inputs]))
         ])
-        
-        plc_addr = protocol.plc_addr or (conn_state['plc_ip'], 2222)
+
+        plc_addr = handler.plc_addr or (conn_state['plc_ip'], 2222)
+        log.info(f"T->O: CIP Seq={handler.cip_seq}, Inputs=0x{inputs:02X}")
         log.debug(f"UDP TX ({len(packet)}B to {plc_addr}): {packet.hex()}")
-        log.debug(f"T->O: CIP Seq={protocol.cip_seq}, Inputs=0x{inputs:02X}")
-        protocol.cip_seq = (protocol.cip_seq + 1) % (2**16)
-        protocol.transport.sendto(packet, plc_addr)
-        protocol.encap_seq = (protocol.encap_seq + 1) % (2**32)
+        handler.cip_seq = (handler.cip_seq + 1) % (2**16)
+        handler.send(packet, plc_addr)
+        handler.encap_seq = (handler.encap_seq + 1) % (2**32)
         await asyncio.sleep(conn_state.get('rpi_t_o', 20000) / 1_000_000)
 
-async def task_watchdog(protocol: EIPUDPProtocol, conn_state: dict):
+
+async def task_watchdog(handler: EIPUDPHandler, conn_state: dict):
     """Coroutine de surveillance de la connexion I/O.
 
     Vérifie toutes les 100 ms que des paquets O→T ont été reçus récemment.
@@ -138,12 +150,12 @@ async def task_watchdog(protocol: EIPUDPProtocol, conn_state: dict):
     while True:
         active = conn_state.get('active', False)
         if active and not was_active:
-            protocol.last_ot_time = time.monotonic()
+            handler.last_ot_time = time.monotonic()
             was_active = True
         elif not active:
             was_active = False
-        if active and (time.monotonic() - protocol.last_ot_time) > 5.0:
+        if active and (time.monotonic() - handler.last_ot_time) > 5.0:
             log.warning("Watchdog: No O->T data for 5.0s, closing connection")
             conn_state['active'] = False
-            protocol.plc_addr = None
+            handler.plc_addr = None
         await asyncio.sleep(0.1)
