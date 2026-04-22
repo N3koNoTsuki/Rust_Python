@@ -90,6 +90,7 @@ async def task_send_inputs(protocol: EIPUDPProtocol, conn_state: dict):
     Incrémente encap_seq (32 bits) et cip_seq (16 bits) à chaque paquet.
     """
     was_active = False
+    i = 0
     while True:
         if not conn_state.get('active', False) or 'plc_ip' not in conn_state:
             was_active = False
@@ -101,11 +102,12 @@ async def task_send_inputs(protocol: EIPUDPProtocol, conn_state: dict):
             was_active = True
 
 
+        i += 1
 
 
+        
 
-
-        inputs = 0x00  # TODO: read actual inputs
+        inputs = i % 256 # TODO: read actual inputs
 
 
 

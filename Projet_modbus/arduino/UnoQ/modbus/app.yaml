@@ -1,7 +1,0 @@
-name: modbus
-description: ""
-ports:
-- 5010
-bricks:
-- arduino:web_ui: {}
-icon: 😀
