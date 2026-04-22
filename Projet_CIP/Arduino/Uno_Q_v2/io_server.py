@@ -44,7 +44,12 @@ class EIPUDPHandler:
         self.plc_addr = None
         self.sock = _socket.socket(_socket.AF_INET, _socket.SOCK_DGRAM)
         self.sock.setsockopt(_socket.SOL_SOCKET, _socket.SO_REUSEADDR, 1)
-        self.sock.bind(('0.0.0.0', 2222))
+        self.sock.setsockopt(_socket.SOL_SOCKET, _socket.SO_REUSEPORT, 1)
+        try:
+            self.sock.bind(('0.0.0.0', 2222))
+        except OSError as e:
+            log.error(f"UDP bind FAILED on port 2222: {e}")
+            raise
         self.sock.settimeout(1.0)
         log.info(f"UDP socket bound to {self.sock.getsockname()}")
 
@@ -94,8 +99,7 @@ class EIPUDPHandler:
 def start_udp_handler(conn_state: dict) -> EIPUDPHandler:
     """Crée le handler UDP et démarre le thread de réception."""
     handler = EIPUDPHandler(conn_state)
-    t = threading.Thread(target=handler.recv_loop, daemon=True, name="udp-recv")
-    t.start()
+    threading.Thread(target=handler.recv_loop, daemon=True, name="udp-recv").start()
     return handler
 
 

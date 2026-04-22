@@ -18,7 +18,6 @@ import io_server as io
 import eip
 import cpf
 import cip
-import socket
 import logging
 import argparse
 from arduino.app_utils import Bridge, App
@@ -125,7 +124,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
 
                         if service == 0x54:
                             sock_ot = b'\x00\x02\x08\xae\x00\x00\x00\x00' + b'\x00'*8
-                            sock_to = b'\x00\x02\x08\xae' + socket.inet_aton(ip_str) + b'\x00'*8
+                            sock_to = b'\x00\x02\x08\xae\x00\x00\x00\x00' + b'\x00'*8
                             cpf_response = cpf.build_cpf([
                                 (0x0000, b''),
                                 (0x00B2, cip_response),
@@ -185,10 +184,15 @@ if __name__ == "__main__":
         action='store_const',
         dest='loglevel',
         const='DEBUG',
-        default='INFO',
+        default='DEBUG',
         help='Enable verbose logging (DEBUG level)'
     )
     args = parser.parse_args()
     setup_logging(args.loglevel)
-    threading.Thread(target=asyncio.run, args=(main(),), daemon=True).start()
+    def _run_main():
+        try:
+            asyncio.run(main())
+        except Exception as e:
+            log.critical(f"asyncio main crashed: {e}", exc_info=True)
+    threading.Thread(target=_run_main, daemon=True).start()
     App.run(user_loop=loop)
