@@ -1,6 +1,3 @@
-// =========================
-// FILE: tx_unoq_sender.ino
-// =========================
 #include <Arduino_RouterBridge.h>
 #include <Arduino_LED_Matrix.h>
 #include <stdlib.h>
@@ -62,7 +59,10 @@ void loop() {
   static int ind = 0;
   static unsigned long lastChange = 0;
   if (millis() - lastChange >= 1000) {
-    ind = (ind + 1) % 31;
+    ind = (ind + 1) % 32;
+    if(ind >= 32){
+      ind = 0;
+    }
     lastChange = millis();
   }
   for (int i = 2; i <= 6; i++) {
