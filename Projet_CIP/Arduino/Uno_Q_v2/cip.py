@@ -53,31 +53,31 @@ def build_list_identity_payload() -> bytes:
     des champs identité CIP (vendor, device type, product code, revision,
     status, serial, product name, state).
     """
-    payload = bytearray()
-    payload += 0x0001.to_bytes(2, 'little')                             # [0]item count
-    payload += 0x000C.to_bytes(2, 'little')                             # [1] item type
+    payload             = bytearray()
+    payload             += 0x0001.to_bytes(2, 'little')                             # [0]item count
+    payload             += 0x000C.to_bytes(2, 'little')                             # [1] item type
 
 
-    payload_secondary = bytearray()
-    payload_secondary += 0x0001.to_bytes(2, 'little')                   # [3] protocol version
-    payload_secondary += AF_INET.to_bytes(2, 'little')                  # [4] address family
-    payload_secondary += 0xAF12.to_bytes(2, 'big')                      # [5] port
-    payload_secondary += 0x00000000.to_bytes(4, 'big')                  # [6] IP address (0.0.0.0)
-    payload_secondary += 0x0000000000000000.to_bytes(8, 'little')       # [7] padding
-    payload_secondary += VENDOR_ID.to_bytes(2, 'little')                # [8] Vendor ID
-    payload_secondary += DEVICE_TYPE.to_bytes(2, 'little')              # [9] Device Type
-    payload_secondary += PRODUCT_CODE.to_bytes(2, 'little')             # [10] Product Code
-    payload_secondary += REVISION[0].to_bytes(1, 'little')              # [11] Revision Major
-    payload_secondary += REVISION[1].to_bytes(1, 'little')              # [12] Revision Minor
-    payload_secondary += 0x0000.to_bytes(2, 'little')                   # [13] Status
-    payload_secondary += SERIAL_NUMBER.to_bytes(4, 'little')            # [14] Serial Number
-    payload_secondary += len(PRODUCT_NAME).to_bytes(1, 'little')        # [15] Product Length
-    payload_secondary += PRODUCT_NAME.encode('ascii')                   # [16] Product Name
-    payload_secondary += 0xFF.to_bytes(1, 'little')                     # [17] state
+    payload_secondary   = bytearray()
+    payload_secondary   += 0x0001.to_bytes(2, 'little')                   # [3] protocol version
+    payload_secondary   += AF_INET.to_bytes(2, 'little')                  # [4] address family
+    payload_secondary   += 0xAF12.to_bytes(2, 'big')                      # [5] port
+    payload_secondary   += 0x00000000.to_bytes(4, 'big')                  # [6] IP address (0.0.0.0)
+    payload_secondary   += 0x0000000000000000.to_bytes(8, 'little')       # [7] padding
+    payload_secondary   += VENDOR_ID.to_bytes(2, 'little')                # [8] Vendor ID
+    payload_secondary   += DEVICE_TYPE.to_bytes(2, 'little')              # [9] Device Type
+    payload_secondary   += PRODUCT_CODE.to_bytes(2, 'little')             # [10] Product Code
+    payload_secondary   += REVISION[0].to_bytes(1, 'little')              # [11] Revision Major
+    payload_secondary   += REVISION[1].to_bytes(1, 'little')              # [12] Revision Minor
+    payload_secondary   += 0x0000.to_bytes(2, 'little')                   # [13] Status
+    payload_secondary   += SERIAL_NUMBER.to_bytes(4, 'little')            # [14] Serial Number
+    payload_secondary   += len(PRODUCT_NAME).to_bytes(1, 'little')        # [15] Product Length
+    payload_secondary   += PRODUCT_NAME.encode('ascii')                   # [16] Product Name
+    payload_secondary   += 0xFF.to_bytes(1, 'little')                     # [17] state
 
-    item_length = len(payload_secondary)
-    payload += item_length.to_bytes(2, 'little')                        # [2] item length
-    payload += payload_secondary
+    item_length         = len(payload_secondary)
+    payload             += item_length.to_bytes(2, 'little')                        # [2] item length
+    payload             += payload_secondary
     
     return bytes(payload)
 
@@ -173,14 +173,14 @@ def handle_forward_open(payload: bytes, conn_state: dict) -> bytes:
     """
 
     conn_paarameters = ConnectionParameters(*struct.unpack('<BBIIHHIB3sIHIHB', payload[:35]))
-    conn_state['o_t_conn_id'] = conn_paarameters.o_t_conn_id if conn_paarameters.o_t_conn_id != 0 else 0xDEAD0001
-    conn_state['t_o_conn_id'] = conn_paarameters.t_o_conn_id
-    conn_state['rpi_o_t'] = conn_paarameters.rpi_o_t
-    conn_state['rpi_t_o'] = conn_paarameters.rpi_t_o
-    conn_state['conn_serial'] = conn_paarameters.conn_serial
-    conn_state['vendor_id'] = conn_paarameters.vendor_id
+    conn_state['o_t_conn_id']       = conn_paarameters.o_t_conn_id if conn_paarameters.o_t_conn_id != 0 else 0xDEAD0001
+    conn_state['t_o_conn_id']       = conn_paarameters.t_o_conn_id
+    conn_state['rpi_o_t']           = conn_paarameters.rpi_o_t
+    conn_state['rpi_t_o']           = conn_paarameters.rpi_t_o
+    conn_state['conn_serial']       = conn_paarameters.conn_serial
+    conn_state['vendor_id']         = conn_paarameters.vendor_id
     conn_state['originator_serial'] = conn_paarameters.originator_serial
-    conn_state['active'] = True
+    conn_state['active']            = True
     log.info(
         f"ForwardOpen: O->T ID=0x{conn_state['o_t_conn_id']:X}, "
         f"T->O ID=0x{conn_state['t_o_conn_id']:X}, "

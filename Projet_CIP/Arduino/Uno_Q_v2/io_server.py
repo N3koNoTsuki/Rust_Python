@@ -37,12 +37,12 @@ class EIPUDPHandler:
     """
 
     def __init__(self, conn_state: dict) -> None:
-        self.conn_state = conn_state
-        self.last_ot_time = time.monotonic()
-        self.encap_seq = 0
-        self.cip_seq = 0
-        self.plc_addr = None
-        self.sock = _socket.socket(_socket.AF_INET, _socket.SOCK_DGRAM)
+        self.conn_state     = conn_state
+        self.last_ot_time   = time.monotonic()
+        self.encap_seq      = 0
+        self.cip_seq        = 0
+        self.plc_addr       = None
+        self.sock           = _socket.socket(_socket.AF_INET, _socket.SOCK_DGRAM)
         self.sock.setsockopt(_socket.SOL_SOCKET, _socket.SO_REUSEADDR, 1)
         self.sock.setsockopt(_socket.SOL_SOCKET, _socket.SO_REUSEPORT, 1)
         try:
@@ -88,12 +88,12 @@ class EIPUDPHandler:
                 log.warning(f"UDP connected data too short ({len(connected_data)} bytes), ignoring.")
                 continue
 
-            cip_seq = struct.unpack('<H', connected_data[0:2])[0]
+            cip_seq     = struct.unpack('<H', connected_data[0:2])[0]
             output_byte = connected_data[2]
             log.debug(f"O->T: CIP Seq={cip_seq}, Output=0x{output_byte:02X}")
-            self.last_ot_time = time.monotonic()
-            self.plc_addr = addr
-            self.conn_state['output_data'] = output_byte
+            self.last_ot_time               = time.monotonic()
+            self.plc_addr                   = addr
+            self.conn_state['output_data']  = output_byte
 
 
 def start_udp_handler(conn_state: dict) -> EIPUDPHandler:

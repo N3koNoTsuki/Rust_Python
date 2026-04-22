@@ -41,9 +41,9 @@ def parse_cpf(data: bytes) -> list:
     ind = 2
     for i in range(ietm_count) :
         type_id = data[ind] + (data[ind + 1] << 8)
-        length = data[ind + 2] + (data[ind + 3] << 8)
+        length  = data[ind + 2] + (data[ind + 3] << 8)
         payload = data[ind + 4 : ind + 4 + length]
-        ind += 4 + length
+        ind     += 4 + length
         list_ietm.append((type_id, payload))
     return list_ietm
 
@@ -60,10 +60,10 @@ def build_cpf(items: list) -> bytes:
     data += (len(items) & 0xFF).to_bytes(1, 'little')
     data += ((len(items) >> 8) & 0xFF).to_bytes(1, 'little')
     for item in items :
-        type_id, payload = item
-        data += (type_id & 0xFF).to_bytes(1, 'little')
-        data += ((type_id >> 8) & 0xFF).to_bytes(1, 'little')
-        data += (len(payload) & 0xFF).to_bytes(1, 'little')
-        data += ((len(payload) >> 8) & 0xFF).to_bytes(1, 'little')
-        data += payload
+        type_id, payload    = item
+        data                += (type_id & 0xFF).to_bytes(1, 'little')
+        data                += ((type_id >> 8) & 0xFF).to_bytes(1, 'little')
+        data                += (len(payload) & 0xFF).to_bytes(1, 'little')
+        data                += ((len(payload) >> 8) & 0xFF).to_bytes(1, 'little')
+        data                += payload
     return bytes(data)

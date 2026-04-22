@@ -81,14 +81,14 @@ item[]:
 
 Types d'items utilisés :
 
-| Type   | Nom                  | Usage |
-|--------|----------------------|-------|
+| Type   | Nom                  | Usage                                               |
+|--------|----------------------|-----------------------------------------------------|
 | 0x0000 | Null Address         | Item d'adresse vide pour les échanges non-connectés |
-| 0x00B2 | Unconnected Data     | Données CIP sur TCP (requêtes/réponses) |
+| 0x00B2 | Unconnected Data     | Données CIP sur TCP (requêtes/réponses)             |
 | 0x8002 | Connected Address    | Adresse de connexion I/O (8B : conn_id + encap_seq) |
-| 0x00B1 | Connected I/O Data   | Données I/O cycliques sur UDP |
-| 0x8000 | O→T Socket Address   | Indique au PLC l'adresse UDP de destination O→T |
-| 0x8001 | T→O Socket Address   | Indique au PLC l'adresse UDP de destination T→O |
+| 0x00B1 | Connected I/O Data   | Données I/O cycliques sur UDP                       |
+| 0x8000 | O→T Socket Address   | Indique au PLC l'adresse UDP de destination O→T     |
+| 0x8001 | T→O Socket Address   | Indique au PLC l'adresse UDP de destination T→O     |
 
 > **Pourquoi 0x00B1 et pas 0x8001 ?**  
 > `0x8001` est le type "Connected Data" pour TCP. Pour UDP I/O, le type correct est `0x00B1` (Connected I/O Data). Utiliser `0x8001` provoque des erreurs "malformed" côté Wireshark et le PLC ignore les paquets.
@@ -101,11 +101,11 @@ Le dispatcher dans `main.py` lit le service CIP (premier octet du payload CIP) e
 
 Le PLC interroge plusieurs objets CIP avant d'envoyer le ForwardOpen :
 
-| Classe | Objet       | Attributs interrogés |
-|--------|-------------|----------------------|
-| 0x01   | Identity    | 1 (VendorID) à 8 (State) |
-| 0xC0   | TCP/IP      | 1 (Status), 2 (Config Cap.), 3 (Config Ctrl), 5 (Interface Config), **0x12** (Encapsulation Inactivity Timeout — extension Rockwell) |
-| 0xF4   | Port        | 7 (Port Type), 8 (Port Number) |
+| Classe | Objet       | Attributs interrogés                                                                                            |
+|--------|-------------|-----------------------------------------------------------------------------------------------------------------|
+| 0x01   | Identity    | 1 (VendorID) à 8 (State)                                                                                        |
+| 0xC0   | TCP/IP      | 1 (Status), 2 (Config Cap.), 3 (Config Ctrl), 5 (Interface Config), **0x12** (Encapsulation Inactivity Timeout) |
+| 0xF4   | Port        | 7 (Port Type), 8 (Port Number)                                                                                  |
 
 > **Pourquoi l'attribut 0x12 ?**  
 > C'est une extension propriétaire Rockwell. Si l'adaptateur répond `0x08` (Service Not Supported) ou `0x14` (Attribute Not Supported), le PLC le tolère mais boucle en retry. Renvoyer `0x0000` (timeout = 0, désactivé) stoppe les retries.
@@ -201,9 +201,9 @@ Côté PLC Studio 5000 : ajouter un Generic EtherNet/IP Adapter avec le fichier 
 
 ## Codes d'erreur CIP
 
-| Code | Signification | Quand l'utiliser |
-|------|---------------|------------------|
-| 0x08 | Service Not Supported | Le service (0x0E, 0x54...) n'existe pas sur cet objet |
-| 0x14 | Attribute Not Supported | Le service existe mais pas cet attribut précis |
+| Code | Signification           | Quand l'utiliser                                      | 
+|------|-------------------------|-------------------------------------------------------|
+| 0x08 | Service Not Supported   | Le service (0x0E, 0x54...) n'existe pas sur cet objet |
+| 0x14 | Attribute Not Supported | Le service existe mais pas cet attribut précis        |
 
 > Renvoyer `0x08` pour un attribut inconnu au lieu de `0x14` conduit le PLC à considérer que `GetAttributeSingle` n'est pas supporté du tout — il abandonne la séquence de connexion.

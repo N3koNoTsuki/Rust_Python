@@ -17,7 +17,7 @@ Constantes de commandes EIP :
 CMD_REGISTER_SESSION = 0x0065
 CMD_LIST_IDENTITY    = 0x0063
 CMD_SEND_RR_DATA     = 0x006F
-CMD_SEND_UNIT_DATA   = 0x0070
+CMD_SEND_UNIT_DATA   = 0x0070 
 ```
 
 Dataclass `EIPHeader` avec 6 champs : `command`, `length`, `session_handle`, `status`, `sender_context` (bytes), `options`.
@@ -123,14 +123,14 @@ Ajout de `handle_get_attribute_single(class_id, instance, attribute) -> bytes`.
 
 Format de réponse CIP : `[service|0x80, 0x00, status, 0x00] + data`
 
-| Class | Attribut | Valeur | Taille |
-|-------|----------|--------|--------|
-| 0xC0 | 1 Status | `0x00000001` | 4B |
-| 0xC0 | 2 Config Capability | `0x00000010` | 4B |
-| 0xC0 | 3 Config Control | `0x00000000` | 4B |
-| 0xC0 | 5 Interface Config | 20B zéros + `\x00` | 21B |
-| 0xF4 | 7 Port Type | `0x0004` | 2B |
-| 0xF4 | 8 Port Number | `0x0001` | 2B |
+| Class | Attribut            | Valeur             | Taille |
+|-------|---------------------|--------------------|--------|
+| 0xC0  | 1 Status            | `0x00000001`       | 4B     |
+| 0xC0  | 2 Config Capability | `0x00000010`       | 4B     |
+| 0xC0  | 3 Config Control    | `0x00000000`       | 4B     |
+| 0xC0  | 5 Interface Config  | 20B zéros + `\x00` | 21B    |
+| 0xF4  | 7 Port Type         | `0x0004`           | 2B     |
+| 0xF4  | 8 Port Number       | `0x0001`           | 2B     |
 
 Réponse succès : `bytes([0x8E, 0x00, 0x00, 0x00]) + data`  
 Réponse erreur : `bytes([0x8E, 0x00, 0x08, 0x00])`
@@ -149,22 +149,22 @@ Ajout du dataclass `ConnectionParameters` et de `handle_forward_open(payload, co
 
 Format struct : `'<BBIIHHIB3sIHIHB'` → 35 octets, 14 champs :
 
-| Champ | Type | Octets |
-|-------|------|--------|
-| priority_time_tick | B | 1 |
-| timeout_ticks | B | 1 |
-| o_t_conn_id | I | 4 |
-| t_o_conn_id | I | 4 |
-| conn_serial | H | 2 |
-| vendor_id | H | 2 |
-| originator_serial | I | 4 |
-| timeout_multiplier | B | 1 |
-| reserved | 3s | 3 |
-| rpi_o_t | I | 4 |
-| o_t_conn_params | H | 2 |
-| rpi_t_o | I | 4 |
-| t_o_conn_params | H | 2 |
-| transport_type | B | 1 |
+| Champ              | Type | Octets |
+|--------------------|------|--------|
+| priority_time_tick | B    | 1      |
+| timeout_ticks      | B    | 1      |
+| o_t_conn_id        | I    | 4      |
+| t_o_conn_id        | I    | 4      |
+| conn_serial        | H    | 2      |
+| vendor_id          | H    | 2      |
+| originator_serial  | I    | 4      |
+| timeout_multiplier | B    | 1      |
+| reserved           | 3s   | 3      |
+| rpi_o_t            | I    | 4      |
+| o_t_conn_params    | H    | 2      |
+| rpi_t_o            | I    | 4      |
+| t_o_conn_params    | H    | 2      |
+| transport_type     | B    | 1      |
 
 Réponse : `bytes([0xD4, 0x00, 0x00, 0x00])` + `struct.pack('<IIHHIII', o_t, t_o, conn_serial, vendor_id, orig_serial, rpi_ot, rpi_to)` + `b'\x00'`
 
@@ -436,13 +436,13 @@ Ajout d'une vérification du type de l'item 1 (`CPF_IO_DATA = 0x00B1`) avant par
 
 ## État actuel
 
-| Fichier | Contenu |
-|---------|---------|
-| `eip.py` | Header EIP, RegisterSession |
-| `cpf.py` | Common Packet Format |
-| `cip.py` | Identity Object, TCP/IP Object (attr 1-3/5/0x12), Port Object, ForwardOpen, ForwardClose |
-| `main.py` | Serveur TCP, dispatcher EIP/CIP, intégration UDP, logging, argparse |
-| `io_server.py` | Serveur UDP port 2222, réception O→T, envoi T→O (3B), watchdog (5s, race-free) |
+| Fichier        | Contenu                                                                                  |
+|----------------|------------------------------------------------------------------------------------------|
+| `eip.py`       | Header EIP, RegisterSession                                                              |
+| `cpf.py`       | Common Packet Format                                                                     |
+| `cip.py`       | Identity Object, TCP/IP Object (attr 1-3/5/0x12), Port Object, ForwardOpen, ForwardClose |
+| `main.py`      | Serveur TCP, dispatcher EIP/CIP, intégration UDP, logging, argparse                      |
+| `io_server.py` | Serveur UDP port 2222, réception O→T, envoi T→O (3B), watchdog (5s, race-free)           |
 
 **Phase 1 TCP complète ✓** — RegisterSession + GetAttribute + ForwardOpen + ForwardClose fonctionnels.
 

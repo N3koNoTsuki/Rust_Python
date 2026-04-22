@@ -97,15 +97,15 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 case eip.CMD_SEND_RR_DATA:
                     log.info("EIP Command: Send RR Data")
                     try:
-                        items = cpf.parse_cpf(data[30:])
-                        cip_data = items[1][1]
-                        service = cip_data[0]
-                        path_size = cip_data[1]
-                        path = cip_data[2:2+path_size*2]
-                        extra = cip_data[2+path_size*2:]
-                        class_id = path[1]
-                        instance_id = path[3]
-                        attribute_id = path[5] if len(path) >= 6 else 0
+                        items           = cpf.parse_cpf(data[30:])
+                        cip_data        = items[1][1]
+                        service         = cip_data[0]
+                        path_size       = cip_data[1]
+                        path            = cip_data[2:2+path_size*2]
+                        extra           = cip_data[2+path_size*2:]
+                        class_id        = path[1]
+                        instance_id     = path[3]
+                        attribute_id    = path[5] if len(path) >= 6 else 0
                         log.debug(f"  -> CIP Service=0x{service:02X}, Path={path.hex()}, Attr={attribute_id if attribute_id else 'N/A'}")
 
                         match service:
