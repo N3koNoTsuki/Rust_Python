@@ -77,6 +77,7 @@ CPF_NULL_ADDR        = 0x0000
 CPF_UNCONNECTED_DATA = 0x00B2
 CPF_CONNECTED_ADDR   = 0x8002
 CPF_CONNECTED_DATA   = 0x8001
+CPF_IO_DATA          = 0x00B1
 ```
 
 - `parse_cpf(data)` : lit `item_count` (2B LE), boucle avec `offset=2`, par item : `type_id`(2B) + `length`(2B) + `data`(length B), avance de `4 + length`, retourne `list[(type_id, data)]`
@@ -166,9 +167,9 @@ Format struct : `'<BBIIHHIB3sIHIHB'` → 35 octets, 14 champs :
 | t_o_conn_params    | H    | 2      |
 | transport_type     | B    | 1      |
 
-Réponse : `bytes([0xD4, 0x00, 0x00, 0x00])` + `struct.pack('<IIHHIII', o_t, t_o, conn_serial, vendor_id, orig_serial, rpi_ot, rpi_to)` + `b'\x00'`
+Réponse : `bytes([0xD4, 0x00, 0x00, 0x00])` + `struct.pack('<IIHHIII', o_t, t_o, conn_serial, vendor_id, orig_serial, rpi_ot, rpi_to)` + `b'\x00\x00'`
 
-`conn_state` mis à jour : `o_t_conn_id`, `t_o_conn_id`, `rpi_o_t`, `rpi_t_o`, `active=True`
+`conn_state` mis à jour : `o_t_conn_id`, `t_o_conn_id`, `rpi_o_t`, `rpi_t_o`, `conn_serial`, `vendor_id`, `originator_serial`, `active=True`
 
 **Pièges rencontrés** :
 - Format `'<BBIIHHIBb3sIHIHB'` (avec `b` en trop) → 15 valeurs, 14 champs → `TypeError`
@@ -206,6 +207,7 @@ Dispatch :
 - `0x0E` → `cip.handle_get_attribute_single(...)`
 - `0x01` → `cip.handle_get_attribute_all_identity()`
 - `0x54` → `cip.handle_forward_open(extra, conn_state)`
+- `0x4E` → `cip.handle_forward_close(extra, conn_state)`
 
 Construction de la réponse :
 ```python
@@ -228,8 +230,6 @@ eip_response     = eip.build_eip_header(CMD_SEND_RR_DATA, len(payload_response),
 
 ---
 
----
-
 ## Étape 9 — `io_server.py` : serveur UDP + échange I/O
 
 **Fichier** : `io_server.py`
@@ -243,8 +243,8 @@ Structure O→T reçu (UDP payload = CPF brut, pas de header EIP) :
 ```
 CPF item 0 : type=0x8002, 8B → conn_id (4B LE) + seq_count (4B LE)
 CPF item 1 : type=0x00B1, NB → Connected Data :
-    [0:4]  run_idle_header (4B LE) — bit 0 = RUN/IDLE
-    [4]    output_byte (1B)
+    [0:2]  CIP Sequence Count (2B LE)
+    [2]    output_byte (1B)
 ```
 
 Coroutine `task_send_inputs(protocol, conn_state)` :
@@ -252,9 +252,9 @@ Coroutine `task_send_inputs(protocol, conn_state)` :
 - Au premier passage actif : reset `last_ot_time = time.monotonic()` (flag `was_active`)
 - Construit T→O : CPF brut (pas de header EIP) avec :
   - `CPF_CONNECTED_ADDR` (0x8002) : t_o_conn_id (4B) + encap_seq (4B) = 8B
-  - `CPF_IO_DATA` (0x00B1) : inputs (1B)
+  - `CPF_IO_DATA` (0x00B1) : cip_seq (2B LE) + inputs (1B)
 - Envoie vers `protocol.plc_addr or (conn_state['plc_ip'], 2222)`
-- Incrémente `encap_seq` (mod 2³²)
+- Incrémente `encap_seq` (mod 2³²) et `cip_seq` (mod 2¹⁶)
 - Sleep `rpi_t_o / 1_000_000` secondes
 
 **Pièges rencontrés** :
@@ -265,7 +265,6 @@ Coroutine `task_send_inputs(protocol, conn_state)` :
 - T→O enveloppé dans un header EIP (cmd=0x0070) → le PLC ignorait, Wireshark "malformed" → fix : UDP I/O = CPF brut seulement, PAS de header EIP
 - Item type 0x8001 (TCP connected data) utilisé → faux pour UDP I/O → fix : item type 0x00B1 (CPF I/O data)
 - Connected Address 4B (conn_id seulement) → faux → fix : 8B = conn_id + seq_count
-- Séquence count dans le Connected Data → faux → doit être dans le Connected Address (8B)
 - PLC ne démarrait pas l'O→T : `plc_addr=None` empêchait tout envoi T→O → cercle vicieux → fix : stocker `conn_state['plc_ip']` lors du ForwardOpen (TCP), l'utiliser comme destination par défaut
 - Source des formats corrects : analyse de captures réelles Rockwell PointIO (2015) présentes dans `test/Trame/`
 
@@ -277,13 +276,14 @@ Coroutine `task_send_inputs(protocol, conn_state)` :
 
 Coroutine `task_watchdog(protocol, conn_state)` :
 - Poll toutes les 100ms (`await asyncio.sleep(0.1)`)
-- Si `active=True` et `time.monotonic() - last_ot_time > 0.5` :
+- Si `active=True` et `time.monotonic() - last_ot_time > 5.0` :
   - `conn_state['active'] = False`
   - `protocol.plc_addr = None`
   - Log `[WATCHDOG]`
 
 **Pièges rencontrés** :
 - `sleep(1.0)` au lieu de `sleep(0.1)` → délai de détection jusqu'à 1.5s au lieu de 0.5s
+- Timeout 0.5s trop court (PLC encore en "Validating") → porté à 5.0s
 
 ---
 
@@ -293,15 +293,13 @@ Coroutine `task_watchdog(protocol, conn_state)` :
 
 `handle_forward_close(payload, conn_state)` :
 - `conn_state['active'] = False`
-- Réponse : `bytes([0xCE, 0x00, 0x00, 0x00]) + struct.pack('<HHI', conn_serial, vendor_id, 0)`
+- Réponse : `bytes([0xCE, 0x00, 0x00, 0x00]) + struct.pack('<HHI', conn_serial, vendor_id, 0) + b'\x00\x00'`
 
 **Pièges rencontrés** :
 - Service reply ForwardClose = `0x4E | 0x80 = 0xCE` (pas `0xD5`)
 - ForwardOpen response manquait 1 byte final : `b'\x00'` → `b'\x00\x00'` (app_reply_size + reserved = 2 octets selon spec ODVA)
 
 **Fichier** : `main.py`
-
-Ajout `case 0x4E` → `cip.handle_forward_close(extra, conn_state)` dans le dispatcher.
 
 Intégration dans `main()` :
 ```python
@@ -315,14 +313,10 @@ asyncio.create_task(io_server.task_watchdog(protocol, conn_state))
 await server.serve_forever()
 ```
 
-Ajout de `conn_state['plc_ip'] = ip_str` dans le `case 0x54` (ForwardOpen).
-
 **Pièges rencontrés** :
 - Code après `serve_forever()` = code mort → démarrer UDP et tâches AVANT
 - `asyncio.get_running_loop()` ≠ serveur — juste le loop courant
 - Import `io_server as io` → utiliser `io.EIPUDPProtocol`, pas `eip.EIPUDPProtocol`
-
----
 
 ---
 
@@ -365,7 +359,7 @@ cpf.build_cpf([(0x0000, b''), (0x00B2, cip_response)])
 
 # Après : 4 items
 sock_ot = b'\x00\x02\x08\xae\x00\x00\x00\x00' + b'\x00'*8  # port 2222, IP 0.0.0.0
-sock_to = b'\x00\x02\x08\xae' + socket.inet_aton(ip_str) + b'\x00'*8  # port 2222, IP PLC
+sock_to = b'\x00\x02\x08\xae\x00\x00\x00\x00' + b'\x00'*8  # port 2222, IP 0.0.0.0
 cpf.build_cpf([
     (0x0000, b''),
     (0x00B2, cip_response),
@@ -374,7 +368,7 @@ cpf.build_cpf([
 ])
 ```
 
-Structure sockaddr (16B) : `sin_port(2B BE)` + `sin_addr(4B BE)` + `padding(8B)`.
+Structure sockaddr (16B) : `sin_family(2B LE)` + `sin_port(2B BE)` + `sin_addr(4B BE)` + `padding(8B)`.
 
 #### Fix 4 — Format T→O : 1B → 3B
 
@@ -388,11 +382,9 @@ Format correct du T→O Connected Data :
 
 Ajout du compteur `cip_seq` dans `EIPUDPProtocol` et passage à `struct.pack('<H', cip_seq) + bytes([inputs])`.
 
-#### Fix 5 — Watchdog : timeout trop court + race condition
+#### Fix 5 — Watchdog : race condition
 
-Timeout 0.5s trop court : le PLC est encore en phase "Validating" quand le watchdog coupe la connexion.
-
-Porté à 5.0s. De plus, race condition possible entre `task_send_inputs` et `task_watchdog` au moment où `active` passe à `True` (les deux lisent/écrivent `last_ot_time`).
+Race condition possible entre `task_send_inputs` et `task_watchdog` au moment où `active` passe à `True` (les deux lisent/écrivent `last_ot_time`).
 
 Fix : ajout du flag `was_active` dans `task_watchdog` (symétrique à `task_send_inputs`) pour garantir que `last_ot_time` est reset à l'activation quelle que soit l'ordre d'exécution des coroutines :
 
@@ -434,18 +426,153 @@ Ajout d'une vérification du type de l'item 1 (`CPF_IO_DATA = 0x00B1`) avant par
 
 ---
 
+## Étape 12 — `io_server.py` : remplacement asyncio DatagramProtocol → socket bloquant
+
+**Fichier** : `io_server.py`
+
+`asyncio.DatagramProtocol` posait des problèmes de réception UDP dans le contexte multi-thread de l'Arduino Uno Q (conflit entre le thread asyncio et le thread principal `App.run()`).
+
+Remplacement par `EIPUDPHandler` : socket Python bloquant (`SOCK_DGRAM`) avec thread dédié pour la réception :
+
+```python
+class EIPUDPHandler:
+    def __init__(self, conn_state):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+        self.sock.bind(('0.0.0.0', 2222))
+        self.sock.settimeout(1.0)
+
+    def recv_loop(self):  # lancé dans threading.Thread(daemon=True)
+        while True:
+            try:
+                data, addr = self.sock.recvfrom(4096)
+            except socket.timeout:
+                continue
+            # ... parsing CPF, mise à jour conn_state ...
+
+def start_udp_handler(conn_state):
+    handler = EIPUDPHandler(conn_state)
+    threading.Thread(target=handler.recv_loop, daemon=True, name="udp-recv").start()
+    return handler
+```
+
+Dans `main.py` : `loop.create_datagram_endpoint(...)` remplacé par `io.start_udp_handler(conn_state)`.
+
+**Avantages** :
+- Découplage complet entre asyncio et la réception UDP
+- `SO_REUSEPORT` permet la cohabitation avec d'autres sockets sur le port 2222
+- `settimeout(1.0)` évite de bloquer indéfiniment si aucun paquet ne vient
+
+---
+
+## Étape 13 — `main.py` + `sketch.ino` : intégration Bridge/App Arduino Uno Q
+
+**Fichiers** : `main.py`, `sketch.ino`
+
+Le programme Python tourne sur le **MPU Linux** de l'Arduino Uno Q. Le sketch tourne sur le **MCU** (ARM Cortex-M4). Ils communiquent via Bridge (UART interne).
+
+### Architecture du démarrage
+
+```python
+# Thread daemon : boucle asyncio (TCP + tâches I/O)
+threading.Thread(target=lambda: asyncio.run(main()), daemon=True).start()
+
+# Thread principal : framework Arduino Uno Q
+App.run(user_loop=loop)
+```
+
+`serve_forever()` bloque le thread asyncio indéfiniment ; `App.run()` bloque le thread principal → les deux coexistent sans `asyncio.run()` bloquant le main thread.
+
+### Bridge : fonctions exposées
+
+```python
+Bridge.provide("linux_started",    linux_started)     # → MCU attend ce signal
+Bridge.provide("receive_cip_data", receive_cip_data)  # MCU → Linux : entrées pins
+Bridge.provide("send_cip_data",    send_cip_data)     # Linux → MCU : sorties PLC
+```
+
+`conn_state` est étendu avec `input_data` et `output_data` pour transporter les données entre le Bridge et l'adaptateur EIP :
+
+```python
+conn_state = {'active': False, 'input_data': 0, 'output_data': 0}
+
+def receive_cip_data(data):
+    conn_state['input_data'] = int(data) & 0xFF   # lu par task_send_inputs → T→O
+
+def send_cip_data() -> int:
+    return conn_state['output_data'] & 0xFF        # écrit par recv_loop ← O→T
+```
+
+### Sketch MCU (`sketch.ino`)
+
+Le sketch attend `linux_started` avant de démarrer (avec 5s de délai post-`Monitor.begin()`), puis entre dans la boucle principale :
+
+- **T→O** : lit l'état binaire des pins 2-6 (`ind` compteur 5 bits) → `Bridge.notify("receive_cip_data", input)` → reçu par `receive_cip_data()` côté Linux
+- **O→T** : `Bridge.call("send_cip_data").result(outputData)` → retourné par `send_cip_data()` → affiché sur la matrice LED (8 colonnes, 1 colonne/bit)
+
+**Pièges rencontrés** :
+- `asyncio.run(main())` en thread daemon → si le thread principal se termine, tout s'arrête → `App.run()` maintient le thread principal vivant
+- `Bridge.call().result()` est bloquant → ne pas appeler depuis le thread asyncio ; seul le sketch MCU l'appelle
+
+---
+
+## Étape 14 — `board_setup/` : forwarding UDP pour App Lab
+
+**Fichiers** : `board_setup/cip-udp-forward.sh`, `cip-udp-forward.service`, `install.sh`, `uninstall.sh`
+
+### Problème
+
+App Lab déploie le code Python dans un **conteneur Docker**. Docker n'expose que les ports TCP déclarés dans `app.yaml`. Le port **UDP 2222** (échange O→T / T→O) n'est jamais transmis au conteneur : les paquets du PLC arrivent sur la board mais sont silencieusement ignorés.
+
+### Solution : iptables DNAT dynamique
+
+Un script shell surveille les événements Docker (`docker events --filter 'event=start'`). Dès qu'un conteneur dont le nom contient `cip` démarre, il :
+
+1. Récupère l'IP du conteneur dynamiquement via `docker inspect`
+2. Supprime l'ancienne règle DNAT si elle existe (évite les doublons en cas de restart)
+3. Insère une nouvelle règle en tête de `PREROUTING` :
+
+```bash
+iptables -t nat -I PREROUTING 1 -i wlan0 -p udp --dport 2222 \
+    -j DNAT --to-destination <IP_conteneur>:2222
+```
+
+Le `sleep 1` avant `docker inspect` laisse le temps au réseau Docker de s'initialiser (l'IP n'est pas immédiatement disponible au moment de l'événement `start`).
+
+### Déploiement systemd
+
+Le script est encapsulé dans un service systemd (`After=docker.service`) pour démarrer automatiquement au boot :
+
+```
+cip-udp-forward.service
+  ExecStart=/usr/local/bin/cip-udp-forward.sh
+  Restart=on-failure / RestartSec=5
+```
+
+`install.sh` copie le script dans `/usr/local/bin/`, installe le service et l'active. `uninstall.sh` fait l'inverse et nettoie la règle iptables.
+
+**Pièges rencontrés** :
+- L'IP du conteneur change à chaque recréation par App Lab → la règle doit être mise à jour dynamiquement, pas fixée une seule fois
+- Sans `sleep 1`, `docker inspect` retourne une IP vide car le réseau n'est pas encore attaché au moment de l'événement `start`
+- L'ancienne règle DNAT doit être supprimée avant d'en insérer une nouvelle, sinon deux règles coexistent et seule la première (possiblement obsolète) s'applique
+
+---
+
 ## État actuel
 
-| Fichier        | Contenu                                                                                  |
-|----------------|------------------------------------------------------------------------------------------|
-| `eip.py`       | Header EIP, RegisterSession                                                              |
-| `cpf.py`       | Common Packet Format                                                                     |
-| `cip.py`       | Identity Object, TCP/IP Object (attr 1-3/5/0x12), Port Object, ForwardOpen, ForwardClose |
-| `main.py`      | Serveur TCP, dispatcher EIP/CIP, intégration UDP, logging, argparse                      |
-| `io_server.py` | Serveur UDP port 2222, réception O→T, envoi T→O (3B), watchdog (5s, race-free)           |
+| Fichier        | Contenu                                                                                       |
+|----------------|-----------------------------------------------------------------------------------------------|
+| `eip.py`       | Header EIP, RegisterSession                                                                   |
+| `cpf.py`       | Common Packet Format                                                                          |
+| `cip.py`       | Identity Object, TCP/IP Object (attr 1-3/5/0x12), Port Object, ForwardOpen, ForwardClose     |
+| `main.py`      | Serveur TCP, dispatcher EIP/CIP, intégration UDP, Bridge/App, logging, argparse               |
+| `io_server.py` | Socket UDP bloquant (thread dédié), réception O→T, envoi T→O (3B), watchdog (5s, race-free)  |
+| `sketch.ino`   | Sketch MCU : init Bridge/Monitor/Matrix, compteur binaire pins 2-6, Bridge notify/call, LED  |
+| `board_setup/` | Service systemd + iptables DNAT pour exposer UDP 2222 au conteneur Docker App Lab            |
 
 **Phase 1 TCP complète ✓** — RegisterSession + GetAttribute + ForwardOpen + ForwardClose fonctionnels.
 
 **Phase 2 UDP complète ✓** — Échange I/O cyclique opérationnel. PLC atteint l'état "Connected".
 
-**Prochaine étape** : `bridge.py` — interface UART Arduino (SimulatedBridge + ArduinoBridge).
+**Bridge complète ✓** — Communication MCU ↔ Linux via Bridge : données T→O et O→T échangées en temps réel.
