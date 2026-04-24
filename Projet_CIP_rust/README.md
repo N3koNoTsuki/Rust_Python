@@ -183,7 +183,7 @@ bash board_setup/install.sh
 
 Ce script installe un service systemd qui redirige les paquets UDP 2222 vers le conteneur Docker App Lab via une règle `iptables DNAT`. Sans ça, les paquets O→T du PLC n'atteignent jamais l'application.
 
-Pour plus de détails : [board_setup/README.md](board_setup/README.md)
+Pour plus de détails : [board_setup/README.md](arduino/Uno_Q/board_setup/README.md)
 
 ### Étape 2 — Via App Lab
 
