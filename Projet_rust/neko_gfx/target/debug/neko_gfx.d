@@ -1,0 +1,1 @@
+/home/neko/Documents/projet/RckwllXUnoQ/Projet_rust/neko_gfx/target/debug/neko_gfx: /home/neko/Documents/projet/RckwllXUnoQ/Projet_rust/neko_gfx/src/canva.rs /home/neko/Documents/projet/RckwllXUnoQ/Projet_rust/neko_gfx/src/main.rs
