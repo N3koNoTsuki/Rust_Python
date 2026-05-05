@@ -1,6 +1,8 @@
 /System Volume Information
 */rust/target
+*/*/rust/target
 */rust/dist
+**/target/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .pytest_cache/
