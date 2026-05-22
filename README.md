@@ -4,7 +4,9 @@ Projet de recherche et développement visant à faire communiquer un **PLC Rockw
 
 ## Démonstration
 
-https://github.com/N3koNoTsuki/ArduinoXRockwell/blob/main/Showcase.mp4
+https://github.com/user-attachments/assets/cb7c719e-1355-4eb0-8761-37f6fca83785
+
+> *Version HD : [`Showcase.mp4`](Showcase.mp4)*
 
 ---
 
